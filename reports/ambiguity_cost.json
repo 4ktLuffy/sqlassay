@@ -1,0 +1,195 @@
+{
+  "revision": "2025-11-06",
+  "model": {
+    "model": "qwen3.5:4b-mlx",
+    "temperature": 0.0,
+    "think": false,
+    "num_predict": 512
+  },
+  "n": 23,
+  "buckets": {
+    "not_run": 4,
+    "matched_neither": 16,
+    "matched_gold": 1,
+    "matched_alternative": 2
+  },
+  "penalised_by_ambiguity": [
+    {
+      "item_id": "bird-dev-01034",
+      "bucket": "matched_alternative",
+      "n_alternatives": 2,
+      "predicted_sql": "SELECT player_api_id FROM Player_Attributes WHERE date LIKE '201%' GROUP BY player_api_id ORDER BY MAX(overall_rating) DESC LIMIT 1",
+      "detail": "returned ((30981,),), equally correct among 2, scored zero"
+    },
+    {
+      "item_id": "bird-dev-01517",
+      "bucket": "matched_alternative",
+      "n_alternatives": 3,
+      "predicted_sql": "SELECT Segment FROM customers ORDER BY CustomerID ASC LIMIT 1",
+      "detail": "returned (('SME',),), equally correct among 3, scored zero"
+    }
+  ],
+  "results": [
+    {
+      "item_id": "bird-dev-00030",
+      "bucket": "not_run",
+      "n_alternatives": 0,
+      "predicted_sql": "",
+      "detail": "not enumerable: LIMIT 5 admits combinations, not single rows"
+    },
+    {
+      "item_id": "bird-dev-00037",
+      "bucket": "matched_neither",
+      "n_alternatives": 518,
+      "predicted_sql": "SELECT s.Street, s.City, s.Zip, s.State\nFROM frpm f\nJOIN schools s ON f.CDSCode = s.CDSCode\nORDER BY f.NumGE1500 / f.NumTstTakr ASC\nLIMIT 1",
+      "detail": "did not execute: OperationalError: no such column: f.NumGE1500"
+    },
+    {
+      "item_id": "bird-dev-00057",
+      "bucket": "matched_neither",
+      "n_alternatives": 4,
+      "predicted_sql": "SELECT s.Phone, s.Ext\nFROM satscores AS ss\nJOIN schools AS s ON ss.cds = s.CDSCode\nORDER BY ss.AvgScrWrite DESC\nLIMIT 332 OFFSET 1",
+      "detail": "returned (('(562) 229-7745', None), ('(408) 366-7600', None), ('(408) 867-3411', None), ('(650) 354-8200', None), ('(714) 220-305"
+    },
+    {
+      "item_id": "bird-dev-00081",
+      "bucket": "matched_neither",
+      "n_alternatives": 9,
+      "predicted_sql": "SELECT s.City, f.Low Grade, f.School Name\nFROM schools AS s\nJOIN frpm AS f ON s.CDSCode = f.CDSCode\nWHERE s.State = 'CA'\nORDER BY f.Low Grade DESC\nLIMIT 1",
+      "detail": "did not execute: unparseable: ParseError"
+    },
+    {
+      "item_id": "bird-dev-00082",
+      "bucket": "matched_neither",
+      "n_alternatives": 2,
+      "predicted_sql": "SELECT High Grade FROM frpm WHERE Longitude = (SELECT MAX(Longitude) FROM schools)",
+      "detail": "did not execute: OperationalError: no such column: High"
+    },
+    {
+      "item_id": "bird-dev-00094",
+      "bucket": "matched_neither",
+      "n_alternatives": 49,
+      "predicted_sql": "SELECT a.account_id, d.A11 AS min_salary, (d.A11 - MIN(d.A11)) AS gap\nFROM account a\nJOIN client c ON a.district_id = c.district_id\nJOIN district d ON 1=1\nWHERE c.gender = 'F'\nGROUP BY a.account_id, d.A11\nORDER BY d.A11 ASC\nLIMIT 1",
+      "detail": "returned ((1, 8110, 0),)"
+    },
+    {
+      "item_id": "bird-dev-00392",
+      "bucket": "not_run",
+      "n_alternatives": 0,
+      "predicted_sql": "",
+      "detail": "not enumerable: LIMIT 3 admits combinations, not single rows"
+    },
+    {
+      "item_id": "bird-dev-00766",
+      "bucket": "matched_neither",
+      "n_alternatives": 36,
+      "predicted_sql": "SELECT s.full_name FROM superhero s JOIN hero_attribute ha ON s.id = ha.hero_id JOIN attribute a ON ha.attribute_id = a.id WHERE a.attribute_name = 'strength' ORDER BY ha.attribute_value DESC LIMIT 1",
+      "detail": "returned ()"
+    },
+    {
+      "item_id": "bird-dev-00802",
+      "bucket": "matched_gold",
+      "n_alternatives": 2,
+      "predicted_sql": "SELECT superhero_name FROM superhero ORDER BY height_cm DESC LIMIT 1",
+      "detail": "returned the gold's own answer"
+    },
+    {
+      "item_id": "bird-dev-00847",
+      "bucket": "matched_neither",
+      "n_alternatives": 6,
+      "predicted_sql": "SELECT d.surname FROM drivers d JOIN qualifying q ON d.driverId = q.driverId WHERE q.raceId = 19 AND q.q2 IS NOT NULL ORDER BY q.q2 ASC LIMIT 1",
+      "detail": "returned (('R\u00e4ikk\u00f6nen',),)"
+    },
+    {
+      "item_id": "bird-dev-00906",
+      "bucket": "matched_neither",
+      "n_alternatives": 17,
+      "predicted_sql": "SELECT r.raceId, r.points\nFROM races r\nJOIN results res ON r.raceId = res.raceId\nJOIN drivers d ON res.driverId = d.driverId\nWHERE d.forename = 'Lewis' AND d.surname = 'Hamilton'\nORDER BY r.year ASC\nLIMIT 1",
+      "detail": "did not execute: OperationalError: no such column: r.points"
+    },
+    {
+      "item_id": "bird-dev-01002",
+      "bucket": "matched_neither",
+      "n_alternatives": 14,
+      "predicted_sql": "SELECT d.forename || ' ' || d.surname AS full_name, d.nationality, r.name AS first_race_name\nFROM drivers d\nJOIN races r ON d.dob = (SELECT MAX(dob) FROM drivers)\nWHERE d.dob = (SELECT MAX(dob) FROM drivers)\nORDER BY d.dob DESC\nLIMIT 1",
+      "detail": "returned (('Lance Stroll', 'Canadian', 'Australian Grand Prix'),)"
+    },
+    {
+      "item_id": "bird-dev-01034",
+      "bucket": "matched_alternative",
+      "n_alternatives": 2,
+      "predicted_sql": "SELECT player_api_id FROM Player_Attributes WHERE date LIKE '201%' GROUP BY player_api_id ORDER BY MAX(overall_rating) DESC LIMIT 1",
+      "detail": "returned ((30981,),), equally correct among 2, scored zero"
+    },
+    {
+      "item_id": "bird-dev-01090",
+      "bucket": "matched_neither",
+      "n_alternatives": 2,
+      "predicted_sql": "SELECT p.long_passing FROM Player_Attributes p JOIN Player pa ON p.player_api_id = pa.id WHERE pa.birthday = (SELECT MIN(birthday) FROM Player)",
+      "detail": "returned ()"
+    },
+    {
+      "item_id": "bird-dev-01117",
+      "bucket": "not_run",
+      "n_alternatives": 0,
+      "predicted_sql": "",
+      "detail": "not enumerable: LIMIT 10 admits combinations, not single rows"
+    },
+    {
+      "item_id": "bird-dev-01135",
+      "bucket": "not_run",
+      "n_alternatives": 0,
+      "predicted_sql": "",
+      "detail": "not enumerable: LIMIT 5 admits combinations, not single rows"
+    },
+    {
+      "item_id": "bird-dev-01284",
+      "bucket": "matched_neither",
+      "n_alternatives": 5,
+      "predicted_sql": "SELECT MIN(P.First Date) AS First_Date\nFROM Patient P\nJOIN Examination E ON P.ID = E.ID\nWHERE E.LDH < 500\nORDER BY E.LDH DESC\nLIMIT 1",
+      "detail": "did not execute: unparseable: ParseError"
+    },
+    {
+      "item_id": "bird-dev-01290",
+      "bucket": "matched_neither",
+      "n_alternatives": 4,
+      "predicted_sql": "SELECT e.Examination FROM Examination e JOIN Laboratory l ON e.ID = l.ID WHERE (l.ALB > 3.5 AND l.ALB < 5.5) ORDER BY l.ALB DESC LIMIT 1",
+      "detail": "did not execute: OperationalError: no such column: e.Examination"
+    },
+    {
+      "item_id": "bird-dev-01318",
+      "bucket": "matched_neither",
+      "n_alternatives": 2,
+      "predicted_sql": "SELECT e.event_name, COUNT(a.link_to_member) AS total_attendance\nFROM event e\nJOIN attendance a ON e.event_id = a.link_to_event\nJOIN member m ON a.link_to_member = m.member_id\nWHERE m.position = 'Student_Club'\nGROUP BY e.event_name\nORDER BY total_attendance DESC\nLIMIT 1",
+      "detail": "returned ()"
+    },
+    {
+      "item_id": "bird-dev-01365",
+      "bucket": "matched_neither",
+      "n_alternatives": 2,
+      "predicted_sql": "SELECT e.expense_description AS \"expenses\", b.remaining AS \"lowest_remaining\"\nFROM expense e\nJOIN budget b ON e.link_to_budget = b.budget_id\nWHERE b.event_status = 'active'\nORDER BY b.remaining ASC\nLIMIT 1",
+      "detail": "returned ()"
+    },
+    {
+      "item_id": "bird-dev-01388",
+      "bucket": "matched_neither",
+      "n_alternatives": 2,
+      "predicted_sql": "SELECT m.first_name || ' ' || m.last_name AS full_name, i.source AS income_source\nFROM income i\nJOIN member m ON i.link_to_member = m.member_id\nORDER BY i.amount DESC\nLIMIT 1",
+      "detail": "returned ((\"Adela O'Gallagher\", 'Dues'),)"
+    },
+    {
+      "item_id": "bird-dev-01389",
+      "bucket": "matched_neither",
+      "n_alternatives": 3,
+      "predicted_sql": "SELECT e.event_name FROM event e JOIN budget b ON e.event_id = b.link_to_event ORDER BY b.spent ASC LIMIT 1",
+      "detail": "returned (('February Speaker',),)"
+    },
+    {
+      "item_id": "bird-dev-01517",
+      "bucket": "matched_alternative",
+      "n_alternatives": 3,
+      "predicted_sql": "SELECT Segment FROM customers ORDER BY CustomerID ASC LIMIT 1",
+      "detail": "returned (('SME',),), equally correct among 3, scored zero"
+    }
+  ]
+}

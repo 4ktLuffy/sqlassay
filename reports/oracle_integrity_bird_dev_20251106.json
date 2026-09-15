@@ -1,0 +1,167 @@
+{
+  "n_items": 1534,
+  "n_admissible": 1504,
+  "n_excluded": 30,
+  "by_kind": {
+    "ok": 1504,
+    "ambiguous_tie": 23,
+    "ambiguous": 7
+  },
+  "n_gold_verified": 1504,
+  "excluded": [
+    {
+      "item_id": "bird-dev-00030",
+      "kind": "ambiguous_tie",
+      "evidence": "ORDER BY key (5.0,) ties across the LIMIT 5 boundary over 3 rows with 3 distinct projections: gold returns ('Hyampom',) but ('Emigrant Gap',) is equally valid"
+    },
+    {
+      "item_id": "bird-dev-00037",
+      "kind": "ambiguous_tie",
+      "evidence": "ORDER BY key (None,) ties across the LIMIT 1 boundary over 549 rows with 518 distinct projections: gold returns ('1111 Van Ness Avenue', 'Fresno', 'CA', '93721-2002') but ('26831 Prospect Street', 'Boron', 'CA', '93516-1539') is equally valid"
+    },
+    {
+      "item_id": "bird-dev-00057",
+      "kind": "ambiguous_tie",
+      "evidence": "ORDER BY key (512,) ties across the LIMIT 1 boundary over 4 rows with 4 distinct projections: gold returns ('(916) 395-5050', None) but ('(805) 641-5000', None) is equally valid"
+    },
+    {
+      "item_id": "bird-dev-00081",
+      "kind": "ambiguous_tie",
+      "evidence": "ORDER BY key (None,) ties across the LIMIT 1 boundary over 9 rows with 9 distinct projections: gold returns ('Oroville', '7', 'Central Middle - RISE') but ('Garden Grove', '9', 'Lincoln High Continuation') is equally valid"
+    },
+    {
+      "item_id": "bird-dev-00082",
+      "kind": "ambiguous_tie",
+      "evidence": "ORDER BY key (124.28481,) ties across the LIMIT 1 boundary over 2 rows with 2 distinct projections: gold returns ('K-8',) but (None,) is equally valid"
+    },
+    {
+      "item_id": "bird-dev-00094",
+      "kind": "ambiguous_tie",
+      "evidence": "ORDER BY key (8541,) ties across the LIMIT 1 boundary over 55 rows with 49 distinct projections: gold returns (6, 4431) but (463, 4431) is equally valid"
+    },
+    {
+      "item_id": "bird-dev-00207",
+      "kind": "ambiguous",
+      "evidence": "LIMIT without an ORDER BY in a subquery: the engine may return any rows"
+    },
+    {
+      "item_id": "bird-dev-00272",
+      "kind": "ambiguous",
+      "evidence": "LIMIT without an ORDER BY in the query: the engine may return any rows"
+    },
+    {
+      "item_id": "bird-dev-00392",
+      "kind": "ambiguous_tie",
+      "evidence": "ORDER BY key ('2004-10-04',) ties across the LIMIT 3 boundary over 418 rows with 418 distinct projections: gold returns ('Orcish Artillery',) but ('Dunerider Outlaw',) is equally valid"
+    },
+    {
+      "item_id": "bird-dev-00462",
+      "kind": "ambiguous",
+      "evidence": "LIMIT without an ORDER BY in the query: the engine may return any rows"
+    },
+    {
+      "item_id": "bird-dev-00751",
+      "kind": "ambiguous",
+      "evidence": "LIMIT without an ORDER BY in the query: the engine may return any rows"
+    },
+    {
+      "item_id": "bird-dev-00766",
+      "kind": "ambiguous_tie",
+      "evidence": "ORDER BY key (100,) ties across the LIMIT 1 boundary over 63 rows with 36 distinct projections: gold returns ('Richard Milhouse Jones',) but ('Clark Joseph Kent (Kal-El)',) is equally valid"
+    },
+    {
+      "item_id": "bird-dev-00802",
+      "kind": "ambiguous_tie",
+      "evidence": "ORDER BY key (30480,) ties across the LIMIT 1 boundary over 2 rows with 2 distinct projections: gold returns ('Surtur',) but ('Ymir',) is equally valid"
+    },
+    {
+      "item_id": "bird-dev-00812",
+      "kind": "ambiguous",
+      "evidence": "LIMIT without an ORDER BY in the query: the engine may return any rows"
+    },
+    {
+      "item_id": "bird-dev-00847",
+      "kind": "ambiguous_tie",
+      "evidence": "ORDER BY key (None,) ties across the LIMIT 1 boundary over 6 rows with 6 distinct projections: gold returns ('Fisichella',) but ('Sutil',) is equally valid"
+    },
+    {
+      "item_id": "bird-dev-00906",
+      "kind": "ambiguous_tie",
+      "evidence": "ORDER BY key (2007,) ties across the LIMIT 1 boundary over 17 rows with 17 distinct projections: gold returns ('Australian Grand Prix', 6.0) but ('European Grand Prix', 70.0) is equally valid"
+    },
+    {
+      "item_id": "bird-dev-01002",
+      "kind": "ambiguous_tie",
+      "evidence": "ORDER BY key (2451115.5,) ties across the LIMIT 1 boundary over 14 rows with 14 distinct projections: gold returns ('Lance', 'Stroll', 'Canadian', 'Australian Grand Prix') but ('Lance', 'Stroll', 'Canadian', 'Belgian Grand Prix') is equally valid"
+    },
+    {
+      "item_id": "bird-dev-01034",
+      "kind": "ambiguous_tie",
+      "evidence": "ORDER BY key (90,) ties across the LIMIT 1 boundary over 3 rows with 2 distinct projections: gold returns (30657,) but (30981,) is equally valid"
+    },
+    {
+      "item_id": "bird-dev-01090",
+      "kind": "ambiguous_tie",
+      "evidence": "ORDER BY key ('1967-01-23 00:00:00',) ties across the LIMIT 1 boundary over 4 rows with 2 distinct projections: gold returns (75,) but (72,) is equally valid"
+    },
+    {
+      "item_id": "bird-dev-01117",
+      "kind": "ambiguous_tie",
+      "evidence": "ORDER BY key (218,) ties across the LIMIT 10 boundary over 3 rows with 3 distinct projections: gold returns (33060,) but (93450,) is equally valid"
+    },
+    {
+      "item_id": "bird-dev-01135",
+      "kind": "ambiguous_tie",
+      "evidence": "ORDER BY key (44,) ties across the LIMIT 5 boundary over 4 rows with 4 distinct projections: gold returns (15031,) but (15032,) is equally valid"
+    },
+    {
+      "item_id": "bird-dev-01144",
+      "kind": "ambiguous",
+      "evidence": "LIMIT without an ORDER BY in the query: the engine may return any rows"
+    },
+    {
+      "item_id": "bird-dev-01284",
+      "kind": "ambiguous_tie",
+      "evidence": "ORDER BY key (499,) ties across the LIMIT 1 boundary over 5 rows with 5 distinct projections: gold returns ('1992-09-21',) but ('1989-12-02',) is equally valid"
+    },
+    {
+      "item_id": "bird-dev-01290",
+      "kind": "ambiguous_tie",
+      "evidence": "ORDER BY key (5.4,) ties across the LIMIT 1 boundary over 4 rows with 4 distinct projections: gold returns ('1981-06-01',) but ('1984-08-06',) is equally valid"
+    },
+    {
+      "item_id": "bird-dev-01318",
+      "kind": "ambiguous_tie",
+      "evidence": "ORDER BY key (30,) ties across the LIMIT 1 boundary over 2 rows with 2 distinct projections: gold returns ('Yearly Kickoff',) but ('Registration',) is equally valid"
+    },
+    {
+      "item_id": "bird-dev-01365",
+      "kind": "ambiguous_tie",
+      "evidence": "ORDER BY key (-24.25,) ties across the LIMIT 1 boundary over 2 rows with 2 distinct projections: gold returns ('Water, chips, cookies',) but ('Pizza',) is equally valid"
+    },
+    {
+      "item_id": "bird-dev-01388",
+      "kind": "ambiguous_tie",
+      "evidence": "ORDER BY key (100,) ties across the LIMIT 1 boundary over 2 rows with 2 distinct projections: gold returns ('Connor', 'Hilton', 'Dues') but ('Sacha', 'Harrison', 'Dues') is equally valid"
+    },
+    {
+      "item_id": "bird-dev-01389",
+      "kind": "ambiguous_tie",
+      "evidence": "ORDER BY key (6.0,) ties across the LIMIT 1 boundary over 3 rows with 3 distinct projections: gold returns ('November Speaker',) but ('October Speaker',) is equally valid"
+    },
+    {
+      "item_id": "bird-dev-01399",
+      "kind": "ambiguous",
+      "evidence": "LIMIT without an ORDER BY in the query: the engine may return any rows"
+    },
+    {
+      "item_id": "bird-dev-01517",
+      "kind": "ambiguous_tie",
+      "evidence": "ORDER BY key ('2012-08-23',) ties across the LIMIT 1 boundary over 10 rows with 3 distinct projections: gold returns ('KAM',) but ('SME',) is equally valid"
+    }
+  ],
+  "suite": "bird",
+  "revision": "2025-11-06",
+  "elapsed_s": 1006.08,
+  "timeout_s": 300.0
+}
