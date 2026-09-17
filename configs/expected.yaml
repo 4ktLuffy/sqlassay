@@ -1,0 +1,49 @@
+# Expected bands for the negative controls. DERIVED, NOT TYPED.
+#
+# Regenerate with:
+#     python tools/derive_bands.py reports/floors_bird_dev_20251106.json
+#
+# Measured on: BIRD dev 2025-11-06, 1465 admissible items,
+# chance estimated over 10 seeds.
+#
+# EVERY MAXIMUM BELOW IS A MEASURED FLOOR, NOT A ZERO. This is the single most
+# important thing about this file. On an execution oracle the floors are not
+# zero for concrete reasons, and a band set at zero would fail for a reason
+# that is a property of the suite rather than a defect in anything -- and
+# would then be "fixed" by weakening something real.
+
+gold_predictor:
+  # The positive control, and every other control's twin. No slack: the answer
+  # key must score itself perfectly or nothing measured against it means
+  # anything.
+  #
+  # NOT derived from the floors artifact -- that pass measures trivial
+  # predictors and contains no gold run. 1.0 is the definition of this
+  # control, not a measurement of it: the control itself is what measures
+  # gold, and its whole job is to fail if gold cannot reach 1.0.
+  accuracy: {eq: 1.0}
+
+null_predictor:
+  # Measured null floor: 0.001365188 = 2/1465.
+  # Not zero: 2 item(s) have a gold returning exactly one NULL,
+  # which `SELECT NULL` matches outright.
+  # Band = measured floor + one item (0.000682594), so a second such item
+  # surfaces as a control failure instead of vanishing into slack.
+  accuracy_max: {max: 0.002047782}
+  # Fixed, not derived: gold must beat null by half the scale. Deriving this
+  # from the gold score would let a broken suite lower its own bar.
+  min_margin: {min: 0.5}
+
+shuffled_gold:
+  # Rescoring against a deranged answer key should land at chance.
+  # Measured chance: mean 0.002389078, sd 0.001171289
+  # over 10 seeds. Band = mean + 3sd, floored at one item.
+  accuracy_max: {max: 0.005902945}
+
+random_gold:
+  # NOT the band -- the band is re-measured per suite at control time, because
+  # chance is a property of the suite and freezing it here would hide a suite
+  # whose chance level changed. This is only a sanity maximum, set well above
+  # the highest seed measured (0.004778157), to catch a suite where
+  # another item's gold is right absurdly often.
+  chance_max: {max: 0.050000000}

@@ -41,6 +41,7 @@ a database or a model.
 
 from __future__ import annotations
 
+import re
 from collections import Counter
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
@@ -58,6 +59,7 @@ __all__ = [
     "NormBool",
     "compare_result_sets",
     "gold_is_ambiguous",
+    "gold_is_clock_dependent",
     "normalize_row",
     "normalize_value",
     "order_is_significant",
@@ -206,6 +208,42 @@ def gold_is_ambiguous(sql: str, *, dialect: str = "duckdb") -> tuple[bool, str]:
             where = "the query" if owner is parsed else "a subquery"
             return True, f"LIMIT without an ORDER BY in {where}: the engine may return any rows"
     return False, "determinate"
+
+
+# `'now'` may be any argument, not the first: STRFTIME takes the format
+# string ahead of it, as in STRFTIME('%Y', 'now'). An earlier version of this
+# pattern required it to come first and missed exactly that form.
+_CLOCK = re.compile(
+    r"""\b(?:JULIANDAY|DATE|DATETIME|STRFTIME|TIME|UNIXEPOCH)\s*\([^)]*['"]now['"]"""
+    r"""|\bCURRENT_(?:DATE|TIME|TIMESTAMP)\b""",
+    re.IGNORECASE,
+)
+
+
+def gold_is_clock_dependent(sql: str) -> tuple[bool, str]:
+    """Does this query's answer depend on when it is run?
+
+    A gold containing ``JULIANDAY('now')``, ``DATE('now')``, ``CURRENT_DATE``
+    and friends has no fixed answer: the result set changes as time passes, so
+    the benchmark's answer key is a function of the date you run it on. Two
+    people running the suite a year apart are scored against different gold.
+
+    This is decidable **statically**, and deliberately is: executing twice a
+    second apart would almost never catch it, which is exactly how it survived
+    the oracle's determinism check and surfaced only as an unreproducible twin
+    forty minutes into a control run.
+
+    The pattern matches only the *function-call* forms, so a data literal --
+    ``WHERE status = 'now'`` -- is not flagged. Returns ``(dependent, reason)``.
+    """
+    match = _CLOCK.search(sql)
+    if match is None:
+        return False, "no clock reference"
+    start = max(0, match.start() - 40)
+    return True, (
+        f"answer depends on the current clock via {match.group(0).strip()!r}: "
+        f"...{' '.join(sql[start : match.end() + 30].split())}..."
+    )
 
 
 @dataclass(frozen=True)

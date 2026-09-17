@@ -1,0 +1,205 @@
+{
+  "revision": "2025-11-06",
+  "n_admissible": 1465,
+  "complete": true,
+  "chance_band_random_gold": {
+    "n_seeds": 10,
+    "mean": 0.0023890784982935156,
+    "sd": 0.0011712889807721273,
+    "min": 0.0006825938566552901,
+    "max": 0.00477815699658703
+  },
+  "floors": [
+    {
+      "predictor": "null",
+      "n": 1465,
+      "correct": 2,
+      "accuracy": 0.0013651877133105802,
+      "parse_failed": 0,
+      "execute_failed": 0,
+      "resultset_failed": 1463,
+      "matched_items": [
+        "bird-dev-01391",
+        "bird-dev-01504"
+      ],
+      "matched_items_truncated": 0
+    },
+    {
+      "predictor": "empty",
+      "n": 1465,
+      "correct": 0,
+      "accuracy": 0.0,
+      "parse_failed": 0,
+      "execute_failed": 0,
+      "resultset_failed": 1465,
+      "matched_items": [],
+      "matched_items_truncated": 0
+    },
+    {
+      "predictor": "constant_count",
+      "n": 1465,
+      "correct": 0,
+      "accuracy": 0.0,
+      "parse_failed": 0,
+      "execute_failed": 0,
+      "resultset_failed": 1465,
+      "matched_items": [],
+      "matched_items_truncated": 0
+    },
+    {
+      "predictor": "random_gold:seed=0",
+      "n": 1465,
+      "correct": 1,
+      "accuracy": 0.0006825938566552901,
+      "parse_failed": 0,
+      "execute_failed": 0,
+      "resultset_failed": 1464,
+      "matched_items": [
+        "bird-dev-01050"
+      ],
+      "matched_items_truncated": 0
+    },
+    {
+      "predictor": "random_gold:seed=1",
+      "n": 1465,
+      "correct": 4,
+      "accuracy": 0.0027303754266211604,
+      "parse_failed": 0,
+      "execute_failed": 0,
+      "resultset_failed": 1461,
+      "matched_items": [
+        "bird-dev-00302",
+        "bird-dev-01262",
+        "bird-dev-01324",
+        "bird-dev-01394"
+      ],
+      "matched_items_truncated": 0
+    },
+    {
+      "predictor": "random_gold:seed=2",
+      "n": 1465,
+      "correct": 2,
+      "accuracy": 0.0013651877133105802,
+      "parse_failed": 0,
+      "execute_failed": 0,
+      "resultset_failed": 1463,
+      "matched_items": [
+        "bird-dev-00320",
+        "bird-dev-01171"
+      ],
+      "matched_items_truncated": 0
+    },
+    {
+      "predictor": "random_gold:seed=3",
+      "n": 1465,
+      "correct": 3,
+      "accuracy": 0.0020477815699658703,
+      "parse_failed": 0,
+      "execute_failed": 0,
+      "resultset_failed": 1462,
+      "matched_items": [
+        "bird-dev-00067",
+        "bird-dev-00858",
+        "bird-dev-00977"
+      ],
+      "matched_items_truncated": 0
+    },
+    {
+      "predictor": "random_gold:seed=4",
+      "n": 1465,
+      "correct": 3,
+      "accuracy": 0.0020477815699658703,
+      "parse_failed": 0,
+      "execute_failed": 0,
+      "resultset_failed": 1462,
+      "matched_items": [
+        "bird-dev-00056",
+        "bird-dev-00301",
+        "bird-dev-01200"
+      ],
+      "matched_items_truncated": 0
+    },
+    {
+      "predictor": "random_gold:seed=5",
+      "n": 1465,
+      "correct": 2,
+      "accuracy": 0.0013651877133105802,
+      "parse_failed": 0,
+      "execute_failed": 0,
+      "resultset_failed": 1463,
+      "matched_items": [
+        "bird-dev-00216",
+        "bird-dev-01092"
+      ],
+      "matched_items_truncated": 0
+    },
+    {
+      "predictor": "random_gold:seed=6",
+      "n": 1465,
+      "correct": 4,
+      "accuracy": 0.0027303754266211604,
+      "parse_failed": 0,
+      "execute_failed": 0,
+      "resultset_failed": 1461,
+      "matched_items": [
+        "bird-dev-00299",
+        "bird-dev-00825",
+        "bird-dev-00863",
+        "bird-dev-01051"
+      ],
+      "matched_items_truncated": 0
+    },
+    {
+      "predictor": "random_gold:seed=7",
+      "n": 1465,
+      "correct": 5,
+      "accuracy": 0.0034129692832764505,
+      "parse_failed": 0,
+      "execute_failed": 0,
+      "resultset_failed": 1460,
+      "matched_items": [
+        "bird-dev-00245",
+        "bird-dev-00692",
+        "bird-dev-01123",
+        "bird-dev-01298",
+        "bird-dev-01496"
+      ],
+      "matched_items_truncated": 0
+    },
+    {
+      "predictor": "random_gold:seed=8",
+      "n": 1465,
+      "correct": 4,
+      "accuracy": 0.0027303754266211604,
+      "parse_failed": 0,
+      "execute_failed": 0,
+      "resultset_failed": 1461,
+      "matched_items": [
+        "bird-dev-00070",
+        "bird-dev-00414",
+        "bird-dev-00933",
+        "bird-dev-00982"
+      ],
+      "matched_items_truncated": 0
+    },
+    {
+      "predictor": "random_gold:seed=9",
+      "n": 1465,
+      "correct": 7,
+      "accuracy": 0.00477815699658703,
+      "parse_failed": 0,
+      "execute_failed": 0,
+      "resultset_failed": 1458,
+      "matched_items": [
+        "bird-dev-00056",
+        "bird-dev-00266",
+        "bird-dev-00336",
+        "bird-dev-00666",
+        "bird-dev-00969",
+        "bird-dev-01275",
+        "bird-dev-01317"
+      ],
+      "matched_items_truncated": 0
+    }
+  ]
+}

@@ -15,6 +15,7 @@ import pytest
 from sqlassay.normalize import (
     compare_result_sets,
     gold_is_ambiguous,
+    gold_is_clock_dependent,
     normalize_value,
     order_is_significant,
 )
@@ -183,3 +184,44 @@ class TestAmbiguityScoping:
 
     def test_ordered_outer_limit_is_determinate(self) -> None:
         assert gold_is_ambiguous("SELECT a FROM t ORDER BY a LIMIT 5")[0] is False
+
+
+class TestClockDependence:
+    """A gold whose answer changes with the date is not an answer key.
+
+    Found the expensive way: four such items made the control suite's twin
+    unreproducible forty minutes into a run, after passing a two-execution
+    determinism check that had no chance of catching them.
+    """
+
+    @pytest.mark.parametrize(
+        "sql",
+        [
+            "SELECT a FROM t WHERE JULIANDAY('now') - JULIANDAY(b) > 100",
+            "SELECT a FROM t WHERE julianday('now') > 1",
+            "SELECT a FROM t WHERE DATE('now') = b",
+            "SELECT a FROM t WHERE b < CURRENT_DATE",
+            "SELECT a FROM t WHERE b < current_timestamp",
+            "SELECT STRFTIME('%Y', 'now') FROM t",
+        ],
+    )
+    def test_clock_functions_are_flagged(self, sql: str) -> None:
+        dependent, reason = gold_is_clock_dependent(sql)
+        assert dependent is True
+        assert reason.strip()
+
+    @pytest.mark.parametrize(
+        "sql",
+        [
+            "SELECT a FROM t",
+            # A data literal, not a clock call. Flagging this would exclude a
+            # perfectly good item for containing four letters.
+            "SELECT a FROM t WHERE status = 'now'",
+            "SELECT a FROM t WHERE label LIKE '%now%'",
+            # DATE() on a column is fine; only DATE('now') is not.
+            "SELECT DATE(birth_date) FROM t",
+            "SELECT JULIANDAY(b) - JULIANDAY(c) FROM t",
+        ],
+    )
+    def test_ordinary_sql_is_not_flagged(self, sql: str) -> None:
+        assert gold_is_clock_dependent(sql)[0] is False

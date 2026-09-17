@@ -1,33 +1,34 @@
 {
   "n_items": 1534,
-  "n_admissible": 1484,
-  "n_excluded": 50,
+  "n_admissible": 1468,
+  "n_excluded": 66,
   "by_kind": {
-    "ok": 1484,
+    "ok": 1468,
     "ambiguous_tie": 44,
+    "gold_clock_dependent": 16,
     "ambiguous": 6
   },
-  "n_gold_verified": 1484,
+  "n_gold_verified": 1468,
   "excluded": [
     {
       "item_id": "bird-dev-00030",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (5.0,) ties across the LIMIT 5 boundary over 3 rows with 3 distinct projections: gold returns ('Hyampom',) but ('Emigrant Gap',) is equally valid"
+      "evidence": "ORDER BY key (5.0,) ties across the LIMIT 5 boundary over 3 rows with 3 distinct projections: gold returns ('Hyampom',) but ('Woody',) is equally valid"
     },
     {
       "item_id": "bird-dev-00037",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (None,) ties across the LIMIT 1 boundary over 549 rows with 518 distinct projections: gold returns ('1111 Van Ness Avenue', 'Fresno', 'CA', '93721-2002') but ('632 West 13th Street', 'Merced', 'CA', '95341-5908') is equally valid"
+      "evidence": "ORDER BY key (None,) ties across the LIMIT 1 boundary over 549 rows with 518 distinct projections: gold returns ('1111 Van Ness Avenue', 'Fresno', 'CA', '93721-2002') but ('155 West Washington Boulevard, Suite 517', 'Los Angeles', 'CA', '90015-3582') is equally valid"
     },
     {
       "item_id": "bird-dev-00057",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (512,) ties across the LIMIT 1 boundary over 4 rows with 4 distinct projections: gold returns ('(916) 395-5050', None) but ('(209) 533-8510', '12') is equally valid"
+      "evidence": "ORDER BY key (512,) ties across the LIMIT 1 boundary over 4 rows with 4 distinct projections: gold returns ('(916) 395-5050', None) but ('(805) 771-1845', None) is equally valid"
     },
     {
       "item_id": "bird-dev-00068",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (1,) ties across the LIMIT 1 boundary over 3 rows with 3 distinct projections: gold returns ('Sacramento',) but ('Calaveras',) is equally valid"
+      "evidence": "ORDER BY key (1,) ties across the LIMIT 1 boundary over 3 rows with 3 distinct projections: gold returns ('Sacramento',) but ('Lake',) is equally valid"
     },
     {
       "item_id": "bird-dev-00080",
@@ -37,7 +38,7 @@
     {
       "item_id": "bird-dev-00081",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (None,) ties across the LIMIT 1 boundary over 9 rows with 9 distinct projections: gold returns ('Oroville', '7', 'Central Middle - RISE') but ('Denair', 'K', 'Denair Academic Avenues') is equally valid"
+      "evidence": "ORDER BY key (None,) ties across the LIMIT 1 boundary over 9 rows with 9 distinct projections: gold returns ('Oroville', '7', 'Central Middle - RISE') but ('Waterford', 'K', 'Roberts Ferry Community Day') is equally valid"
     },
     {
       "item_id": "bird-dev-00082",
@@ -55,9 +56,14 @@
       "evidence": "ORDER BY key ('1995-01-01',) ties across the LIMIT 1 boundary over 359 rows with 315 distinct projections: gold returns (9,) but (4511,) is equally valid"
     },
     {
+      "item_id": "bird-dev-00194",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via 'CURRENT_TIMESTAMP': ...SELECT T1.client_id, STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T3.birth_da..."
+    },
+    {
       "item_id": "bird-dev-00342",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (None,) ties across the LIMIT 1 boundary over 55867 rows with 21513 distinct projections: gold returns (\"Ancestor's Chosen\",) but ('Spectral Shift',) is equally valid"
+      "evidence": "ORDER BY key (None,) ties across the LIMIT 1 boundary over 55867 rows with 21513 distinct projections: gold returns (\"Ancestor's Chosen\",) but ('Celestial Convergence',) is equally valid"
     },
     {
       "item_id": "bird-dev-00349",
@@ -67,7 +73,7 @@
     {
       "item_id": "bird-dev-00392",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key ('2004-10-04',) ties across the LIMIT 3 boundary over 418 rows with 418 distinct projections: gold returns ('Orcish Artillery',) but ('Steel Golem',) is equally valid"
+      "evidence": "ORDER BY key ('2004-10-04',) ties across the LIMIT 3 boundary over 418 rows with 418 distinct projections: gold returns ('Orcish Artillery',) but ('Flameshot',) is equally valid"
     },
     {
       "item_id": "bird-dev-00476",
@@ -77,7 +83,7 @@
     {
       "item_id": "bird-dev-00514",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key ('{X}{X}{R}',) ties across the LIMIT 10 boundary over 6 rows with 6 distinct projections: gold returns ('Release the Gremlins',) but ('Fall of the Titans',) is equally valid"
+      "evidence": "ORDER BY key ('{X}{X}{R}',) ties across the LIMIT 10 boundary over 6 rows with 6 distinct projections: gold returns ('Release the Gremlins',) but ('Meteor Shower',) is equally valid"
     },
     {
       "item_id": "bird-dev-00515",
@@ -92,17 +98,17 @@
     {
       "item_id": "bird-dev-00610",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (87393,) ties across the LIMIT 1 boundary over 456 rows with 80 distinct projections: gold returns ('Autobiographer',) but ('Tag Editor',) is equally valid"
+      "evidence": "ORDER BY key (87393,) ties across the LIMIT 1 boundary over 456 rows with 80 distinct projections: gold returns ('Autobiographer',) but ('Analytical',) is equally valid"
     },
     {
       "item_id": "bird-dev-00671",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key ('2010-07-19 19:39:09.0',) ties across the LIMIT 1 boundary over 12 rows with 12 distinct projections: gold returns ('Geoff Dalgas',) but ('Jarrod Dixon',) is equally valid"
+      "evidence": "ORDER BY key ('2010-07-19 19:39:09.0',) ties across the LIMIT 1 boundary over 12 rows with 12 distinct projections: gold returns ('Geoff Dalgas',) but ('wahalulu',) is equally valid"
     },
     {
       "item_id": "bird-dev-00736",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (35,) ties across the LIMIT 1 boundary over 3 rows with 3 distinct projections: gold returns ('Ammo',) but ('Jack-Jack',) is equally valid"
+      "evidence": "ORDER BY key (35,) ties across the LIMIT 1 boundary over 3 rows with 3 distinct projections: gold returns ('Ammo',) but ('Ando Masahashi',) is equally valid"
     },
     {
       "item_id": "bird-dev-00751",
@@ -112,12 +118,12 @@
     {
       "item_id": "bird-dev-00766",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (100,) ties across the LIMIT 1 boundary over 63 rows with 36 distinct projections: gold returns ('Richard Milhouse Jones',) but ('Heracles',) is equally valid"
+      "evidence": "ORDER BY key (100,) ties across the LIMIT 1 boundary over 63 rows with 36 distinct projections: gold returns ('Richard Milhouse Jones',) but ('Thor Odinson',) is equally valid"
     },
     {
       "item_id": "bird-dev-00794",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (100,) ties across the LIMIT 1 boundary over 40 rows with 40 distinct projections: gold returns ('Air-Walker',) but ('Hyperion',) is equally valid"
+      "evidence": "ORDER BY key (100,) ties across the LIMIT 1 boundary over 40 rows with 40 distinct projections: gold returns ('Air-Walker',) but ('Bizarro',) is equally valid"
     },
     {
       "item_id": "bird-dev-00802",
@@ -127,7 +133,7 @@
     {
       "item_id": "bird-dev-00810",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (100,) ties across the LIMIT 1 boundary over 278 rows with 25 distinct projections: gold returns ('Cosmic Entity',) but ('Human / Cosmic',) is equally valid"
+      "evidence": "ORDER BY key (100,) ties across the LIMIT 1 boundary over 278 rows with 25 distinct projections: gold returns ('Cosmic Entity',) but ('Eternal',) is equally valid"
     },
     {
       "item_id": "bird-dev-00812",
@@ -145,24 +151,29 @@
       "evidence": "ORDER BY key (None,) ties across the LIMIT 1 boundary over 6 rows with 6 distinct projections: gold returns ('Fisichella',) but ('Sutil',) is equally valid"
     },
     {
+      "item_id": "bird-dev-00898",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via 'CURRENT_TIMESTAMP': ...SELECT STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', dob), foren..."
+    },
+    {
       "item_id": "bird-dev-00906",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (2007,) ties across the LIMIT 1 boundary over 17 rows with 17 distinct projections: gold returns ('Australian Grand Prix', 6.0) but ('Turkish Grand Prix', 84.0) is equally valid"
+      "evidence": "ORDER BY key (2007,) ties across the LIMIT 1 boundary over 17 rows with 17 distinct projections: gold returns ('Australian Grand Prix', 6.0) but ('Malaysian Grand Prix', 14.0) is equally valid"
     },
     {
       "item_id": "bird-dev-00908",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (78,) ties across the LIMIT 1 boundary over 135 rows with 18 distinct projections: gold returns (78, 'Monaco Grand Prix', 2009, 'Monte-Carlo') but (78, 'Monaco Grand Prix', 2015, 'Monte-Carlo') is equally valid"
+      "evidence": "ORDER BY key (78,) ties across the LIMIT 1 boundary over 135 rows with 18 distinct projections: gold returns (78, 'Monaco Grand Prix', 2009, 'Monte-Carlo') but (78, 'Monaco Grand Prix', 2007, 'Monte-Carlo') is equally valid"
     },
     {
       "item_id": "bird-dev-00913",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (None,) ties across the LIMIT 1 boundary over 72 rows with 32 distinct projections: gold returns ('Malaysia',) but ('Mexico',) is equally valid"
+      "evidence": "ORDER BY key (None,) ties across the LIMIT 1 boundary over 72 rows with 32 distinct projections: gold returns ('Malaysia',) but ('Morocco',) is equally valid"
     },
     {
       "item_id": "bird-dev-01002",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (2451115.5,) ties across the LIMIT 1 boundary over 14 rows with 14 distinct projections: gold returns ('Lance', 'Stroll', 'Canadian', 'Australian Grand Prix') but ('Lance', 'Stroll', 'Canadian', 'British Grand Prix') is equally valid"
+      "evidence": "ORDER BY key (2451115.5,) ties across the LIMIT 1 boundary over 14 rows with 14 distinct projections: gold returns ('Lance', 'Stroll', 'Canadian', 'Australian Grand Prix') but ('Lance', 'Stroll', 'Canadian', 'Canadian Grand Prix') is equally valid"
     },
     {
       "item_id": "bird-dev-01014",
@@ -177,12 +188,12 @@
     {
       "item_id": "bird-dev-01026",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (1,) ties across the LIMIT 1 boundary over 13 rows with 13 distinct projections: gold returns ('Piast Gliwice',) but ('Celtic',) is equally valid"
+      "evidence": "ORDER BY key (1,) ties across the LIMIT 1 boundary over 13 rows with 13 distinct projections: gold returns ('Piast Gliwice',) but ('Roma',) is equally valid"
     },
     {
       "item_id": "bird-dev-01027",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (92,) ties across the LIMIT 10 boundary over 3 rows with 3 distinct projections: gold returns ('Manu Lanzarote',) but ('Manu Molina',) is equally valid"
+      "evidence": "ORDER BY key (92,) ties across the LIMIT 10 boundary over 3 rows with 3 distinct projections: gold returns ('Manu Lanzarote',) but ('Manu Torres',) is equally valid"
     },
     {
       "item_id": "bird-dev-01028",
@@ -205,29 +216,99 @@
       "evidence": "ORDER BY key (218,) ties across the LIMIT 10 boundary over 3 rows with 3 distinct projections: gold returns (33060,) but (93450,) is equally valid"
     },
     {
+      "item_id": "bird-dev-01118",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"JULIANDAY('now'\": ...ECT player_name FROM Player WHERE CAST((JULIANDAY('now') - JULIANDAY(birthday)) AS RE..."
+    },
+    {
+      "item_id": "bird-dev-01121",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via 'CURRENT_TIMESTAMP': ...pi_id = t2.away_player_1 WHERE datetime(CURRENT_TIMESTAMP, 'localtime') - datetime(T1.b..."
+    },
+    {
       "item_id": "bird-dev-01144",
       "kind": "ambiguous",
       "evidence": "LIMIT without an ORDER BY in the query: the engine may return any rows"
     },
     {
+      "item_id": "bird-dev-01156",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via 'CURRENT_TIMESTAMP': ...SELECT DISTINCT T1.ID, STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday..."
+    },
+    {
+      "item_id": "bird-dev-01161",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via 'CURRENT_TIMESTAMP': ...2 ON T1.ID = T2.ID WHERE STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday..."
+    },
+    {
       "item_id": "bird-dev-01168",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key ('1917-04-18',) ties across the LIMIT 1 boundary over 10 rows with 10 distinct projections: gold returns ('1981-07-31', 69, '1917-04-18') but ('1981-12-11', 69, '1917-04-18') is equally valid"
+      "evidence": "ORDER BY key ('1917-04-18',) ties across the LIMIT 1 boundary over 10 rows with 10 distinct projections: gold returns ('1981-07-31', 69, '1917-04-18') but ('1985-04-20', 69, '1917-04-18') is equally valid"
+    },
+    {
+      "item_id": "bird-dev-01211",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via 'CURRENT_TIMESTAMP': ...SELECT DISTINCT T1.ID, STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday..."
+    },
+    {
+      "item_id": "bird-dev-01227",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"STRFTIME('%Y', date('NOW'\": ...SELECT AVG(STRFTIME('%Y', date('NOW')) - STRFTIME('%Y', T1.Birthda..."
+    },
+    {
+      "item_id": "bird-dev-01229",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via 'CURRENT_TIMESTAMP': ...D WHERE T2.TG >= 200 AND STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday..."
+    },
+    {
+      "item_id": "bird-dev-01232",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via 'CURRENT_TIMESTAMP': ...DISTINCT T1.ID, T1.SEX , STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday..."
+    },
+    {
+      "item_id": "bird-dev-01235",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via 'CURRENT_TIMESTAMP': ...CT T1.Diagnosis, T1.ID , STRFTIME('%Y', CURRENT_TIMESTAMP) -STRFTIME('%Y', T1.Birthday)..."
+    },
+    {
+      "item_id": "bird-dev-01236",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via 'CURRENT_TIMESTAMP': ....5 OR T2.RBC >= 6.0) AND STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday..."
+    },
+    {
+      "item_id": "bird-dev-01239",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via 'CURRENT_TIMESTAMP': ...SELECT DISTINCT T1.ID, STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday..."
+    },
+    {
+      "item_id": "bird-dev-01243",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via 'CURRENT_TIMESTAMP': ...2 ON T1.ID = T2.ID WHERE STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday..."
     },
     {
       "item_id": "bird-dev-01253",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (500,) ties across the LIMIT 1 boundary over 4 rows with 4 distinct projections: gold returns ('BEHCET',) but ('PMR',) is equally valid"
+      "evidence": "ORDER BY key (500,) ties across the LIMIT 1 boundary over 4 rows with 4 distinct projections: gold returns ('BEHCET',) but ('RA',) is equally valid"
+    },
+    {
+      "item_id": "bird-dev-01257",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"STRFTIME('%Y', Date('now'\": ...N T1.ID = T2.ID WHERE T2.CRE >= 1.5 AND STRFTIME('%Y', Date('now')) - STRFTIME('%Y', T1.Birthda..."
+    },
+    {
+      "item_id": "bird-dev-01260",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"STRFTIME('%Y', DATE('now'\": ...2 ON T1.ID = T2.ID WHERE T2.RF < 20 AND STRFTIME('%Y', DATE('now')) - STRFTIME('%Y', T1.Birthda..."
     },
     {
       "item_id": "bird-dev-01282",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (59,) ties across the LIMIT 3 boundary over 25 rows with 19 distinct projections: gold returns ('1953-04-06',) but ('1943-06-02',) is equally valid"
+      "evidence": "ORDER BY key (59,) ties across the LIMIT 3 boundary over 25 rows with 19 distinct projections: gold returns ('1953-04-06',) but ('1969-02-06',) is equally valid"
     },
     {
       "item_id": "bird-dev-01290",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (5.4,) ties across the LIMIT 1 boundary over 4 rows with 4 distinct projections: gold returns ('1981-06-01',) but ('1984-08-06',) is equally valid"
+      "evidence": "ORDER BY key (5.4,) ties across the LIMIT 1 boundary over 4 rows with 4 distinct projections: gold returns ('1981-06-01',) but ('1985-01-12',) is equally valid"
     },
     {
       "item_id": "bird-dev-01318",
@@ -247,21 +328,21 @@
     {
       "item_id": "bird-dev-01389",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (6.0,) ties across the LIMIT 1 boundary over 3 rows with 3 distinct projections: gold returns ('November Speaker',) but ('October Speaker',) is equally valid"
+      "evidence": "ORDER BY key (6.0,) ties across the LIMIT 1 boundary over 3 rows with 3 distinct projections: gold returns ('November Speaker',) but ('September Speaker',) is equally valid"
     },
     {
       "item_id": "bird-dev-01407",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (75,) ties across the LIMIT 3 boundary over 7 rows with 7 distinct projections: gold returns ('recFZ47e0eVqcQD9O',) but ('rectoPMq4aQQikNEe',) is equally valid"
+      "evidence": "ORDER BY key (75,) ties across the LIMIT 3 boundary over 7 rows with 7 distinct projections: gold returns ('recFZ47e0eVqcQD9O',) but ('recsI0IzpUuxl2bPh',) is equally valid"
     },
     {
       "item_id": "bird-dev-01517",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key ('2012-08-23',) ties across the LIMIT 1 boundary over 10 rows with 3 distinct projections: gold returns ('KAM',) but ('SME',) is equally valid"
+      "evidence": "ORDER BY key ('2012-08-23',) ties across the LIMIT 1 boundary over 10 rows with 3 distinct projections: gold returns ('KAM',) but ('LAM',) is equally valid"
     }
   ],
   "suite": "bird",
   "revision": "2024-06-27",
-  "elapsed_s": 620.46,
+  "elapsed_s": 865.48,
   "timeout_s": 300.0
 }

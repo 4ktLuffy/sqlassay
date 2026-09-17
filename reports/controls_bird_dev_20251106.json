@@ -1,0 +1,110 @@
+{
+  "revision": "2025-11-06",
+  "n_items": 1465,
+  "admissible": true,
+  "failed_controls": [],
+  "not_run_controls": [],
+  "controls": [
+    {
+      "kind": "gold_predictor",
+      "status": "PASSED",
+      "observed": {
+        "accuracy": 1.0,
+        "n": 1465.0
+      },
+      "expected": {
+        "accuracy": {
+          "eq": 1.0,
+          "min": null,
+          "max": null
+        }
+      },
+      "twin_ok": true,
+      "cause_assertions": {
+        "no_parse_failures": true,
+        "no_execute_failures": true,
+        "no_resultset_failures": true,
+        "every_item_scored": true
+      },
+      "detail": "gold scored 1465/1465 = 1.000000; parse_failed=0 execute_failed=0 resultset_failed=0"
+    },
+    {
+      "kind": "null_predictor",
+      "status": "PASSED",
+      "observed": {
+        "null_accuracy": 0.0013651877133105802,
+        "gold_accuracy": 1.0,
+        "margin": 0.9986348122866894
+      },
+      "expected": {
+        "accuracy_max": {
+          "eq": null,
+          "min": null,
+          "max": 0.002047782
+        },
+        "min_margin": {
+          "eq": null,
+          "min": 0.5,
+          "max": null
+        }
+      },
+      "twin_ok": true,
+      "cause_assertions": {
+        "at_or_below_measured_floor": true,
+        "gold_beats_null_by_margin": true,
+        "null_sql_always_executed": true
+      },
+      "detail": "null 2/1465 = 0.001365; gold 1.000000; margin 0.998635"
+    },
+    {
+      "kind": "shuffled_gold",
+      "status": "PASSED",
+      "observed": {
+        "accuracy": 0.0006825938566552901,
+        "baseline_accuracy": 1.0,
+        "resultset_failed": 1464.0
+      },
+      "expected": {
+        "accuracy_max": {
+          "eq": null,
+          "min": null,
+          "max": 0.005902945
+        }
+      },
+      "twin_ok": true,
+      "cause_assertions": {
+        "collapsed_into_band": true,
+        "parse_unchanged": true,
+        "execute_unchanged": true,
+        "resultset_gate_did_the_work": true,
+        "underanged_scores_one": true
+      },
+      "detail": "deranged 1/1465 = 0.000683 against baseline 1.000000; resultset failures 0 -> 1464"
+    },
+    {
+      "kind": "random_gold",
+      "status": "PASSED",
+      "observed": {
+        "chance_mean": 0.0023890784982935156,
+        "chance_sd": 0.0011712889807721273,
+        "chance_max_seed": 0.00477815699658703,
+        "gold_accuracy": 1.0
+      },
+      "expected": {
+        "chance_max": {
+          "eq": null,
+          "min": null,
+          "max": 0.05
+        }
+      },
+      "twin_ok": true,
+      "cause_assertions": {
+        "random_gold_mostly_executed": true,
+        "random_gold_parses": true,
+        "gold_clears_the_band": true,
+        "chance_below_sanity_maximum": true
+      },
+      "detail": "chance over 10 seeds: mean 0.002389 sd 0.001171; band upper edge 0.005903; gold 1.000000"
+    }
+  ]
+}

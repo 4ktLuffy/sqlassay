@@ -22,6 +22,10 @@ Four ways an item fails, in the order they are cheapest to detect:
    it. Measured on BIRD dev: 39 items, against 6 caught by the static check.
 2. **Gold does not parse**, or is not a single read-only statement.
 3. **Gold does not execute** against its own database.
+0. **Clock-dependent** -- the gold calls ``JULIANDAY('now')``, ``CURRENT_DATE``
+   or similar, so its answer changes with the date. Checked first and
+   statically: two executions a second apart will not catch it. Measured on
+   BIRD dev 2025-11-06: 20 items.
 4. **Gold is non-deterministic** -- executing it twice returns different rows.
    Caught by running it twice and comparing, which is the only way to catch a
    tie-break or a ``random()`` that no static check can see.
@@ -47,7 +51,12 @@ from sqlglot import exp
 from sqlassay.engine import Engine, ExecutionError
 from sqlassay.gates import ParseGate, run_gates
 from sqlassay.models import GateStatus, Item, Prediction
-from sqlassay.normalize import compare_result_sets, gold_is_ambiguous, order_is_significant
+from sqlassay.normalize import (
+    compare_result_sets,
+    gold_is_ambiguous,
+    gold_is_clock_dependent,
+    order_is_significant,
+)
 
 __all__ = [
     "OracleKind",
@@ -75,6 +84,7 @@ class OracleKind(StrEnum):
     OK = "ok"
     AMBIGUOUS = "ambiguous"
     AMBIGUOUS_TIE = "ambiguous_tie"
+    GOLD_CLOCK_DEPENDENT = "gold_clock_dependent"
     GOLD_TOO_SLOW = "gold_too_slow"
     GOLD_UNPARSEABLE = "gold_unparseable"
     GOLD_FAILED = "gold_failed"
@@ -285,6 +295,13 @@ def check_item(
 
     def verdict(kind: OracleKind, evidence: str) -> OracleVerdict:
         return OracleVerdict(item_id=item.item_id, kind=kind, evidence=evidence)
+
+    # 0. Clock dependence. Static, free, and checked first because an answer
+    #    key that changes with the date is unusable regardless of anything
+    #    else that might also be wrong with it.
+    clocked, clock_reason = gold_is_clock_dependent(item.gold_sql)
+    if clocked:
+        return verdict(OracleKind.GOLD_CLOCK_DEPENDENT, clock_reason)
 
     # 1. Static ambiguity. Free, and the most common real defect.
     ambiguous, reason = gold_is_ambiguous(item.gold_sql, dialect=db.dialect)

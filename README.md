@@ -86,11 +86,11 @@ each is a decision this harness makes explicitly, in
 set. A query that errored or timed out did not produce one. The two never arrive in the
 same shape, because an empty gold can legitimately match the first and never the second.
 
-## Measured: BIRD's own quality review introduced 6 new ambiguities while fixing 26
+## Measured: BIRD's own quality review made its answer keys worse, twice
 
-The first thing this harness does is check the **benchmark**, not the model. The gold SQL is
-run as if it were the prediction, through all three gates. An answer key that cannot match
-itself cannot tell you anything about a model.
+The first thing this harness does is check the **benchmark**, not the model. The gold SQL
+is run as if it were the prediction, through all three gates. An answer key that cannot
+match itself cannot tell you anything about a model.
 
 BIRD published a [revised dev set on 2025-11-06](https://huggingface.co/datasets/birdsql/bird_sql_dev_20251106),
 produced by a quality review led by five PhD researchers whose stated goal was to *"minimize
@@ -102,37 +102,71 @@ sqlassay oracle --suite bird --revision 2024-06-27 --timeout-s 300
 sqlassay oracle --suite bird --revision 2025-11-06 --timeout-s 300
 ```
 
-| verdict | 2024-06-27 | 2025-11-06 |
+| defect | 2024-06-27 | 2025-11-06 |
 |---|---|---|
-| usable answer key | 1,484 | **1,504** |
+| gold depends on the **system clock** | 16 | **39** |
 | ambiguous — `ORDER BY` ties across the `LIMIT` boundary | 44 | 23 |
-| ambiguous — `LIMIT` with no `ORDER BY` | 6 | **7** |
+| ambiguous — `LIMIT` with no `ORDER BY` | 6 | 7 |
 | gold that fails to parse / execute / is non-deterministic | 0 | 0 |
-| **excluded** | **50 (3.26%)** | **30 (1.96%)** |
+| **unusable answer keys** | **66 (4.30%)** | **69 (4.50%)** |
 
-Item by item:
+Item by item, what the review did to each class:
 
-| | items |
-|---|---|
-| fixed by the review | 26 |
-| **survived** the review | **24** |
-| **introduced** by the review | **6** |
+| defect class | fixed | survived | **introduced** |
+|---|---|---|---|
+| ambiguous answer keys | 26 | 24 | 6 |
+| clock-dependent answer keys | 2 | 14 | **25** |
 
-**The review halved the mechanically-detectable ambiguity and added six new instances of
-it.** Three of the six are `LIMIT` with no `ORDER BY` anywhere — the simplest and most
-statically obvious form, in queries that did not have the defect before the correction pass
-touched them.
+**The review halved the ambiguity and more than doubled the clock dependence.** Net, the
+suite has slightly *more* unusable answer keys than before it.
 
-That is the finding, and it is an argument rather than a complaint: **a benchmark needs a
-mechanical regression check on its own answer keys**, because a careful human review aimed
-squarely at ambiguity still introduced the thing it was removing. This detector runs in ten
-minutes on a laptop and needs no annotator.
+### The clock-dependent class is the serious one
 
-The most durable case, `bird-dev-00037` — *"the complete address of the school with the
-lowest excellence rate"* — **survived the review unchanged**:
+```sql
+AVG(CAST(strftime('%Y','now') - strftime('%Y', c.birth_date) AS REAL))   -- bird-dev-00092
+(julianday('now') - julianday(cd.issued)) / 365.25                        -- bird-dev-00178
+```
 
-> The `ORDER BY` key is `NULL` for **549 rows**, carrying **518 distinct addresses**. The
-> gold returns one of them. The other 517 are equally correct and all score zero.
+An ambiguous gold has several equally valid answers. A **clock-dependent gold has a
+different answer depending on the date you run it**. Scores on those items are not
+reproducible across time at all: run BIRD today and in six months and the answer key has
+moved underneath you.
+
+Twenty-five of the 39 are in `financial`, which went from 1 to 25 — the review rewrote
+those queries to compute ages with `strftime('%Y','now')`.
+
+### This was found by the harness failing, not by looking for it
+
+The controls first came back **INADMISSIBLE**. The gold predictor — which must score 1.0 —
+returned `1.000000`, then `0.999335`, then `0.997340` *within a single run*. Four
+clock-dependent golds had shifted while the run was in progress.
+
+Two diagnoses were wrong before the right one. Connection poisoning from timeouts:
+refuted by 4,512 clean executions. A rare non-deterministic query: refuted by the failures
+being reproducible once named. Only then did the clock show up — and it had passed the
+oracle's two-execution determinism check, because two executions a second apart cannot see
+a clock move.
+
+With the class excluded, the same controls come back **ADMISSIBLE**, and gold scores
+`1.000000` in all four independent measurements.
+
+## The controls, and the verdict
+
+```bash
+sqlassay controls --seeds 10
+```
+
+| control | result | |
+|---|---|---|
+| `gold_predictor` | PASSED | 1465/1465 = 1.000000 |
+| `null_predictor` | PASSED | null 2/1465 = 0.001365, margin 0.998635 |
+| `shuffled_gold` | PASSED | deranged 0.000683 against baseline 1.000000 |
+| `random_gold` | PASSED | chance 0.002389 ± 0.001171, gold clears the band |
+
+**ADMISSIBLE.** Every band is derived from a measured floor by
+[`tools/derive_bands.py`](tools/derive_bands.py), never typed — and **no floor here is
+zero**: `SELECT NULL` matches 2 items outright, and another item's gold from the same
+database is right 1–7 times in 1,465.
 
 ### Does it actually cost a model marks? Two items, measured
 

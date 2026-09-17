@@ -96,13 +96,17 @@ No accuracy number, no ablation, no repeats, no controls. M3–M5 in [`PLAN.md`]
 not done, and nothing here should be read as a claim about what a small local model can do
 on BIRD.
 
-## 8. The gates' floors on BIRD are unmeasured
+## 8. The clock-dependence check is static, and that is a real limit
 
-`agent-assay` learned this the expensive way: a null predictor's floor is **not zero**.
-`SELECT NULL` matches any item whose gold returns a single NULL, and an always-empty
-predictor matches every item whose gold is legitimately empty. Those floors have not yet
-been measured on BIRD, so no band in this repository is calibrated, and no control can
-currently certify a run.
+It matches the SQL forms — `julianday('now')`, `strftime(..., 'now')`, `CURRENT_DATE` and
+friends. It cannot see a gold whose answer drifts for some other reason, and it would miss
+a clock reference built by string concatenation at runtime. All 39 matched fragments on
+BIRD dev were checked by hand and none is a false positive, but the count is a **lower
+bound on time-dependence**, not a census of it.
+
+An earlier version of the pattern required `'now'` to be the *first* argument, so it missed
+every `strftime('%Y','now')` and reported 20 instead of 39 — a 49% undercount that looked
+entirely plausible. The regression is pinned in `tests/test_normalize.py::TestClockDependence`.
 
 ## 9. One item's gold takes 154 seconds
 

@@ -16,10 +16,20 @@ from pathlib import Path
 
 import typer
 
+from sqlassay.controls import DEFAULT_EXPECTED_PATH, all_controls, build_context, load_expected
 from sqlassay.demo import DEMO_DB_ID, build_demo_database, defective_items, demo_items
 from sqlassay.demonstrate import demonstrate_item, write_report
 from sqlassay.demonstrate import summarise as demo_summary
 from sqlassay.engine import DuckDBDatabase
+from sqlassay.floors import (
+    ConstantCountPredictor,
+    EmptyPredictor,
+    FloorResult,
+    GoldCache,
+    NullPredictor,
+    RandomGoldPredictor,
+    measure_floor,
+)
 from sqlassay.gates import ExecuteGate, ParseGate, ResultSetGate
 from sqlassay.model.ollama import DEFAULT_BASE_URL, OllamaChat, OllamaEmbedder
 from sqlassay.oracle import check_suite
@@ -120,6 +130,172 @@ def oracle(
         f"\n{len(report.admissible_items)} of {len(report.verdicts)} items can score a model. "
         f"{n_excl} excluded ({pct:.2f}%). {elapsed:.1f}s. Written to {out}."
     )
+
+
+@app.command()
+def controls(
+    revision: str = typer.Option("2025-11-06"),
+    bird_root: Path = typer.Option(BIRD_DEFAULT_ROOT),
+    oracle_report: Path = typer.Option(Path("reports/oracle_integrity_bird_dev_20251106.json")),
+    expected: Path = typer.Option(DEFAULT_EXPECTED_PATH),
+    seeds: int = typer.Option(10, help="Seeds for the random-gold chance band."),
+    limit: int = typer.Option(0),
+    allow_not_run: list[str] = typer.Option([], help="Control kinds whose NOT_RUN is tolerated."),
+    out: Path = typer.Option(Path("reports/controls_bird_dev_20251106.json")),
+) -> None:
+    """Run every negative control and print the admissibility verdict.
+
+    Exits 2 when the run is inadmissible. An INADMISSIBLE verdict is a result,
+    not a crash: it says the numbers from this configuration may not be
+    reported, and which control refused them.
+    """
+    from fireassay.admissibility import assess
+    from fireassay.models import Run
+
+    report = json.loads(oracle_report.read_text(encoding="utf-8"))
+    excluded = {e["item_id"] for e in report["excluded"]}
+    bands = load_expected(expected)
+    loaded = load_bird_dev(bird_root, timeout_s=300.0, revision=revision)
+    items = [i for i in loaded.items if i.item_id not in excluded][: limit or None]
+
+    ctx = build_context(items, loaded.databases, bands, revision=revision, seeds=seeds)
+    typer.echo(f"suite: {len(items)} admissible items, revision {revision}\n")
+
+    outcomes = []
+    try:
+        for control in all_controls():
+            outcome = control.run(ctx)
+            outcomes.append(outcome)
+            typer.echo(f"[{outcome.status:8}] {outcome.kind}@{control.version}: {outcome.detail}")
+            for name, ok in outcome.cause_assertions.items():
+                typer.echo(f"             {'ok ' if ok else 'NO '} {name}")
+    finally:
+        loaded.close()
+
+    run = Run(
+        id=f"controls-{revision}",
+        suite_id=f"bird-dev-{revision}",
+        suite_hash="",
+        config_id="controls",
+        config_hash="",
+        env_json={},
+        started_at="",
+        finished_at=None,
+        status="complete",
+    )
+    verdict = assess(run, [], outcomes, allow_not_run=allow_not_run)
+
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(
+        json.dumps(
+            {
+                "revision": revision,
+                "n_items": len(items),
+                "admissible": verdict.admissible,
+                "failed_controls": list(verdict.failed_controls),
+                "not_run_controls": list(verdict.not_run_controls),
+                "controls": [o.model_dump() for o in outcomes],
+            },
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+
+    typer.echo("")
+    if verdict.admissible:
+        typer.echo("ADMISSIBLE: every control passed. Numbers from this configuration may be reported.")
+    else:
+        typer.echo("INADMISSIBLE: numbers from this configuration may NOT be reported.")
+        if verdict.failed_controls:
+            typer.echo(f"  failed : {', '.join(verdict.failed_controls)}")
+        if verdict.not_run_controls:
+            typer.echo(f"  not run: {', '.join(verdict.not_run_controls)}")
+    typer.echo(f"Written to {out}.")
+    if not verdict.admissible:
+        raise typer.Exit(code=2)
+
+
+@app.command()
+def floors(
+    revision: str = typer.Option("2025-11-06"),
+    bird_root: Path = typer.Option(BIRD_DEFAULT_ROOT),
+    oracle_report: Path = typer.Option(Path("reports/oracle_integrity_bird_dev_20251106.json")),
+    seeds: int = typer.Option(10, help="Seeds for the random-gold chance band."),
+    limit: int = typer.Option(0),
+    out: Path = typer.Option(Path("reports/floors_bird_dev_20251106.json")),
+) -> None:
+    """Measure what trivial predictors score. Makes no model call.
+
+    Every band in configs/expected.yaml is derived from this, and is written
+    only after these numbers exist. A band chosen before its floor is measured
+    is a guess with a threshold attached.
+    """
+    import statistics
+
+    report = json.loads(oracle_report.read_text(encoding="utf-8"))
+    excluded = {e["item_id"] for e in report["excluded"]}
+    loaded = load_bird_dev(bird_root, timeout_s=300.0, revision=revision)
+    items = [i for i in loaded.items if i.item_id not in excluded][: limit or None]
+    typer.echo(f"admissible items: {len(items)} (of {len(loaded.items)}, {len(excluded)} excluded)")
+
+    cache = GoldCache()
+    results: list[FloorResult] = []
+    out.parent.mkdir(parents=True, exist_ok=True)
+
+    def flush() -> None:
+        """Rewrite the artifact after every predictor.
+
+        A pass killed at seed 5 of 10 previously lost all ten, because the
+        artifact was written once at the end. Each predictor is a whole sweep
+        of the suite and is worth keeping on its own, so the partial file is
+        always valid and always says how many seeds it actually holds.
+        """
+        band_so_far = [r.accuracy for r in results if r.predictor.startswith("random_gold")]
+        out.write_text(
+            json.dumps(
+                {
+                    "revision": revision,
+                    "n_admissible": len(items),
+                    "complete": len(band_so_far) >= seeds,
+                    "chance_band_random_gold": {
+                        "n_seeds": len(band_so_far),
+                        "mean": statistics.fmean(band_so_far) if band_so_far else 0.0,
+                        "sd": statistics.stdev(band_so_far) if len(band_so_far) > 1 else 0.0,
+                        "min": min(band_so_far) if band_so_far else 0.0,
+                        "max": max(band_so_far) if band_so_far else 0.0,
+                    },
+                    "floors": [r.as_record() for r in results],
+                },
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
+
+    try:
+        for predictor in (NullPredictor(), EmptyPredictor(), ConstantCountPredictor()):
+            r = measure_floor(predictor, items, loaded.databases, cache)
+            results.append(r)
+            flush()
+            typer.echo(f"  {r.predictor:24} accuracy={r.accuracy:.6f}  ({r.correct}/{r.n})")
+
+        for seed in range(seeds):
+            rp = RandomGoldPredictor(seed=seed)
+            rp.index(items)
+            r = measure_floor(rp, items, loaded.databases, cache)
+            results.append(r)
+            flush()
+            typer.echo(f"  {r.predictor:24} accuracy={r.accuracy:.6f}  ({r.correct}/{r.n})")
+    finally:
+        loaded.close()
+
+    flush()
+    chance = json.loads(out.read_text(encoding="utf-8"))["chance_band_random_gold"]
+    typer.echo(
+        f"\nrandom-gold chance band over {chance['n_seeds']} seeds: "
+        f"mean {chance['mean']:.6f}, sd {chance['sd']:.6f}, "
+        f"range [{chance['min']:.6f}, {chance['max']:.6f}]"
+    )
+    typer.echo(f"Written to {out}.")
 
 
 @app.command()

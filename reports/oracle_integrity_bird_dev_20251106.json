@@ -1,23 +1,29 @@
 {
   "n_items": 1534,
-  "n_admissible": 1504,
-  "n_excluded": 30,
+  "n_admissible": 1465,
+  "n_excluded": 69,
   "by_kind": {
-    "ok": 1504,
+    "ok": 1465,
+    "gold_clock_dependent": 39,
     "ambiguous_tie": 23,
     "ambiguous": 7
   },
-  "n_gold_verified": 1504,
+  "n_gold_verified": 1465,
   "excluded": [
+    {
+      "item_id": "bird-dev-00018",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"strftime('%Y', 'now'\": ...ate IS NULL THEN NULL ELSE (strftime('%Y', 'now') - strftime('%Y', sc.OpenDate..."
+    },
     {
       "item_id": "bird-dev-00030",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (5.0,) ties across the LIMIT 5 boundary over 3 rows with 3 distinct projections: gold returns ('Hyampom',) but ('Emigrant Gap',) is equally valid"
+      "evidence": "ORDER BY key (5.0,) ties across the LIMIT 5 boundary over 3 rows with 3 distinct projections: gold returns ('Hyampom',) but ('Woody',) is equally valid"
     },
     {
       "item_id": "bird-dev-00037",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (None,) ties across the LIMIT 1 boundary over 549 rows with 518 distinct projections: gold returns ('1111 Van Ness Avenue', 'Fresno', 'CA', '93721-2002') but ('26831 Prospect Street', 'Boron', 'CA', '93516-1539') is equally valid"
+      "evidence": "ORDER BY key (None,) ties across the LIMIT 1 boundary over 549 rows with 518 distinct projections: gold returns ('1111 Van Ness Avenue', 'Fresno', 'CA', '93721-2002') but ('3801 Broadway', 'Sacramento', 'CA', '95817-3399') is equally valid"
     },
     {
       "item_id": "bird-dev-00057",
@@ -27,7 +33,7 @@
     {
       "item_id": "bird-dev-00081",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (None,) ties across the LIMIT 1 boundary over 9 rows with 9 distinct projections: gold returns ('Oroville', '7', 'Central Middle - RISE') but ('Garden Grove', '9', 'Lincoln High Continuation') is equally valid"
+      "evidence": "ORDER BY key (None,) ties across the LIMIT 1 boundary over 9 rows with 9 distinct projections: gold returns ('Oroville', '7', 'Central Middle - RISE') but ('Encinitas', '7', 'North Coast Alternative High') is equally valid"
     },
     {
       "item_id": "bird-dev-00082",
@@ -35,9 +41,134 @@
       "evidence": "ORDER BY key (124.28481,) ties across the LIMIT 1 boundary over 2 rows with 2 distinct projections: gold returns ('K-8',) but (None,) is equally valid"
     },
     {
+      "item_id": "bird-dev-00092",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"strftime('%Y', 'now'\": ...id) AS female_clients, AVG(CAST(strftime('%Y', 'now') - strftime('%Y', c.birth_dat..."
+    },
+    {
       "item_id": "bird-dev-00094",
       "kind": "ambiguous_tie",
       "evidence": "ORDER BY key (8541,) ties across the LIMIT 1 boundary over 55 rows with 49 distinct projections: gold returns (6, 4431) but (463, 4431) is equally valid"
+    },
+    {
+      "item_id": "bird-dev-00096",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"strftime('%Y', 'now'\": ...rth_date, CASE WHEN strftime('%Y', 'now') - strftime('%Y', c.birth_dat..."
+    },
+    {
+      "item_id": "bird-dev-00100",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"STRFTIME('%Y', 'now'\": ...ate) AS account_open_year, CAST(STRFTIME('%Y', 'now') AS INTEGER) - CAST(fc.birth_..."
+    },
+    {
+      "item_id": "bird-dev-00106",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"strftime('%Y', 'now'\": ...gender, T5.birth_date, (strftime('%Y', 'now') - strftime('%Y', T5.birth_da..."
+    },
+    {
+      "item_id": "bird-dev-00121",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"strftime('%Y', 'now'\": ..., d.A3 AS region, c.gender, strftime('%Y', 'now') - strftime('%Y', c.birth_dat..."
+    },
+    {
+      "item_id": "bird-dev-00123",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"strftime('%Y', 'now'\": ...ient_id, c.gender, CAST(strftime('%Y', 'now') AS INTEGER) - CAST(strftime(..."
+    },
+    {
+      "item_id": "bird-dev-00124",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"strftime('%Y', 'now'\": ...0 END) AS female_clients, AVG(CAST(strftime('%Y', 'now') AS INTEGER) - CAST(strftime(..."
+    },
+    {
+      "item_id": "bird-dev-00127",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"JULIANDAY('now'\": ...client_id) AS client_count, ROUND(AVG(JULIANDAY('now') - JULIANDAY(c.birth_date))/3..."
+    },
+    {
+      "item_id": "bird-dev-00137",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"strftime('%Y', 'now'\": ...c.client_id, c.gender, strftime('%Y', 'now') - strftime('%Y', c.birth_dat..."
+    },
+    {
+      "item_id": "bird-dev-00138",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"strftime('%Y', 'now'\": ...m_cards, CASE WHEN strftime('%Y', 'now') - strftime('%Y', c.birth_dat..."
+    },
+    {
+      "item_id": "bird-dev-00139",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"strftime('%Y', 'now'\": ...l.client_id, cl.gender, strftime('%Y', 'now') - strftime('%Y', cl.birth_da..."
+    },
+    {
+      "item_id": "bird-dev-00143",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"JULIANDAY('now'\": ...a.date AS account_opening_date, JULIANDAY('now') - JULIANDAY(a.date) AS accou..."
+    },
+    {
+      "item_id": "bird-dev-00146",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"julianday('now'\": ...AO.district_id = DI.district_id WHERE (julianday('now') - julianday(AO.birth_date))/..."
+    },
+    {
+      "item_id": "bird-dev-00148",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"strftime('%Y', 'now'\": ...ient_id, c.gender, CAST(strftime('%Y', 'now') AS INTEGER) - CAST(strftime(..."
+    },
+    {
+      "item_id": "bird-dev-00154",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"strftime('%Y', 'now'\": ...ct_name, CASE WHEN strftime('%Y', 'now') - strftime('%Y', c.birth_dat..."
+    },
+    {
+      "item_id": "bird-dev-00156",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"strftime('%Y', 'now'\": ...der, c.birth_date, CAST(strftime('%Y', 'now') - strftime('%Y', c.birth_dat..."
+    },
+    {
+      "item_id": "bird-dev-00158",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"JULIANDAY('now'\": ...oi.account_creation_date, ROUND(JULIANDAY('now') - JULIANDAY(oi.account_creat..."
+    },
+    {
+      "item_id": "bird-dev-00161",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"strftime('%Y', 'now'\": ...der, c.birth_date, CAST(strftime('%Y', 'now') AS INTEGER) - CAST(strftime(..."
+    },
+    {
+      "item_id": "bird-dev-00164",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"strftime('%Y', 'now'\": ...c.client_id, c.gender, CAST(strftime('%Y', 'now') - strftime('%Y', c.birth_dat..."
+    },
+    {
+      "item_id": "bird-dev-00175",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"STRFTIME('%Y', 'now'\": ...tement_accounts_count, AVG(CAST(STRFTIME('%Y', 'now') - STRFTIME('%Y', oa.date) AS..."
+    },
+    {
+      "item_id": "bird-dev-00178",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"julianday('now'\": ...t_id = 9) AS total_accounts_owned, (julianday('now') - julianday(cd.issued))/365...."
+    },
+    {
+      "item_id": "bird-dev-00181",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via 'CURRENT_DATE': ...AS income_category, STRFTIME('%Y', CURRENT_DATE) - STRFTIME('%Y', c.birth_dat..."
+    },
+    {
+      "item_id": "bird-dev-00183",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"STRFTIME('%Y', 'now'\": ...c.gender, c.birth_date, STRFTIME('%Y', 'now') - STRFTIME('%Y', c.birth_dat..."
+    },
+    {
+      "item_id": "bird-dev-00188",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"STRFTIME('%Y', 'now'\": ...END) AS female_count, AVG(CAST(STRFTIME('%Y', 'now') AS INTEGER) - CAST(STRFTIME(..."
+    },
+    {
+      "item_id": "bird-dev-00194",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via 'CURRENT_TIMESTAMP': ...SELECT T1.client_id, STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T3.birth_da..."
     },
     {
       "item_id": "bird-dev-00207",
@@ -52,7 +183,7 @@
     {
       "item_id": "bird-dev-00392",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key ('2004-10-04',) ties across the LIMIT 3 boundary over 418 rows with 418 distinct projections: gold returns ('Orcish Artillery',) but ('Dunerider Outlaw',) is equally valid"
+      "evidence": "ORDER BY key ('2004-10-04',) ties across the LIMIT 3 boundary over 418 rows with 418 distinct projections: gold returns ('Orcish Artillery',) but ('Heartstone',) is equally valid"
     },
     {
       "item_id": "bird-dev-00462",
@@ -67,7 +198,7 @@
     {
       "item_id": "bird-dev-00766",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (100,) ties across the LIMIT 1 boundary over 63 rows with 36 distinct projections: gold returns ('Richard Milhouse Jones',) but ('Clark Joseph Kent (Kal-El)',) is equally valid"
+      "evidence": "ORDER BY key (100,) ties across the LIMIT 1 boundary over 63 rows with 36 distinct projections: gold returns ('Richard Milhouse Jones',) but ('Nathaniel Christopher Adam',) is equally valid"
     },
     {
       "item_id": "bird-dev-00802",
@@ -82,17 +213,22 @@
     {
       "item_id": "bird-dev-00847",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (None,) ties across the LIMIT 1 boundary over 6 rows with 6 distinct projections: gold returns ('Fisichella',) but ('Sutil',) is equally valid"
+      "evidence": "ORDER BY key (None,) ties across the LIMIT 1 boundary over 6 rows with 6 distinct projections: gold returns ('Fisichella',) but ('Davidson',) is equally valid"
+    },
+    {
+      "item_id": "bird-dev-00898",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via 'CURRENT_TIMESTAMP': ...SELECT STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', dob), foren..."
     },
     {
       "item_id": "bird-dev-00906",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (2007,) ties across the LIMIT 1 boundary over 17 rows with 17 distinct projections: gold returns ('Australian Grand Prix', 6.0) but ('European Grand Prix', 70.0) is equally valid"
+      "evidence": "ORDER BY key (2007,) ties across the LIMIT 1 boundary over 17 rows with 17 distinct projections: gold returns ('Australian Grand Prix', 6.0) but ('Hungarian Grand Prix', 80.0) is equally valid"
     },
     {
       "item_id": "bird-dev-01002",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (2451115.5,) ties across the LIMIT 1 boundary over 14 rows with 14 distinct projections: gold returns ('Lance', 'Stroll', 'Canadian', 'Australian Grand Prix') but ('Lance', 'Stroll', 'Canadian', 'Belgian Grand Prix') is equally valid"
+      "evidence": "ORDER BY key (2451115.5,) ties across the LIMIT 1 boundary over 14 rows with 14 distinct projections: gold returns ('Lance', 'Stroll', 'Canadian', 'Australian Grand Prix') but ('Lance', 'Stroll', 'Canadian', 'Hungarian Grand Prix') is equally valid"
     },
     {
       "item_id": "bird-dev-01034",
@@ -110,6 +246,16 @@
       "evidence": "ORDER BY key (218,) ties across the LIMIT 10 boundary over 3 rows with 3 distinct projections: gold returns (33060,) but (93450,) is equally valid"
     },
     {
+      "item_id": "bird-dev-01118",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"JULIANDAY('now'\": ...ECT player_name FROM Player WHERE CAST((JULIANDAY('now') - JULIANDAY(birthday)) AS RE..."
+    },
+    {
+      "item_id": "bird-dev-01121",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via 'CURRENT_TIMESTAMP': ...pi_id = t2.home_player_1 WHERE datetime(CURRENT_TIMESTAMP, 'localtime') - datetime(T1.b..."
+    },
+    {
       "item_id": "bird-dev-01135",
       "kind": "ambiguous_tie",
       "evidence": "ORDER BY key (44,) ties across the LIMIT 5 boundary over 4 rows with 4 distinct projections: gold returns (15031,) but (15032,) is equally valid"
@@ -120,14 +266,64 @@
       "evidence": "LIMIT without an ORDER BY in the query: the engine may return any rows"
     },
     {
+      "item_id": "bird-dev-01156",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via 'CURRENT_TIMESTAMP': ...SELECT DISTINCT T1.ID, STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday..."
+    },
+    {
+      "item_id": "bird-dev-01211",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via 'CURRENT_TIMESTAMP': ...SELECT DISTINCT T1.ID, STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday..."
+    },
+    {
+      "item_id": "bird-dev-01227",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"STRFTIME('%Y', date('NOW'\": ...SELECT AVG(STRFTIME('%Y', date('NOW')) - STRFTIME('%Y', T1.Birthda..."
+    },
+    {
+      "item_id": "bird-dev-01229",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via 'CURRENT_TIMESTAMP': ...D WHERE T2.TG >= 200 AND STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday..."
+    },
+    {
+      "item_id": "bird-dev-01232",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via 'CURRENT_TIMESTAMP': ...DISTINCT T1.ID, T1.SEX , STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday..."
+    },
+    {
+      "item_id": "bird-dev-01235",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via 'CURRENT_TIMESTAMP': ...CT T1.Diagnosis, T1.ID , STRFTIME('%Y', CURRENT_TIMESTAMP) -STRFTIME('%Y', T1.Birthday)..."
+    },
+    {
+      "item_id": "bird-dev-01236",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via 'CURRENT_TIMESTAMP': ....5 OR T2.RBC >= 6.0) AND STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday..."
+    },
+    {
+      "item_id": "bird-dev-01239",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via 'CURRENT_TIMESTAMP': ...SELECT DISTINCT T1.ID, STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday..."
+    },
+    {
+      "item_id": "bird-dev-01243",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via 'CURRENT_TIMESTAMP': ...2 ON T1.ID = T2.ID WHERE STRFTIME('%Y', CURRENT_TIMESTAMP) - STRFTIME('%Y', T1.Birthday..."
+    },
+    {
+      "item_id": "bird-dev-01257",
+      "kind": "gold_clock_dependent",
+      "evidence": "answer depends on the current clock via \"STRFTIME('%Y', Date('now'\": ...N T1.ID = T2.ID WHERE T2.CRE >= 1.5 AND STRFTIME('%Y', Date('now')) - STRFTIME('%Y', T1.Birthda..."
+    },
+    {
       "item_id": "bird-dev-01284",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (499,) ties across the LIMIT 1 boundary over 5 rows with 5 distinct projections: gold returns ('1992-09-21',) but ('1989-12-02',) is equally valid"
+      "evidence": "ORDER BY key (499,) ties across the LIMIT 1 boundary over 5 rows with 5 distinct projections: gold returns ('1992-09-21',) but ('1990-05-08',) is equally valid"
     },
     {
       "item_id": "bird-dev-01290",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key (5.4,) ties across the LIMIT 1 boundary over 4 rows with 4 distinct projections: gold returns ('1981-06-01',) but ('1984-08-06',) is equally valid"
+      "evidence": "ORDER BY key (5.4,) ties across the LIMIT 1 boundary over 4 rows with 4 distinct projections: gold returns ('1981-06-01',) but ('1985-01-12',) is equally valid"
     },
     {
       "item_id": "bird-dev-01318",
@@ -157,11 +353,11 @@
     {
       "item_id": "bird-dev-01517",
       "kind": "ambiguous_tie",
-      "evidence": "ORDER BY key ('2012-08-23',) ties across the LIMIT 1 boundary over 10 rows with 3 distinct projections: gold returns ('KAM',) but ('SME',) is equally valid"
+      "evidence": "ORDER BY key ('2012-08-23',) ties across the LIMIT 1 boundary over 10 rows with 3 distinct projections: gold returns ('KAM',) but ('LAM',) is equally valid"
     }
   ],
   "suite": "bird",
   "revision": "2025-11-06",
-  "elapsed_s": 1006.08,
+  "elapsed_s": 1337.83,
   "timeout_s": 300.0
 }
