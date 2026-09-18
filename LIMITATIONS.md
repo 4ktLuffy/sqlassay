@@ -17,10 +17,10 @@ published:
 - [Understanding the Effects of Noise in BIRD-Bench](https://arxiv.org/pdf/2402.12243)
   reports a 66.1% error rate on the Mini-Dev subset.
 
-The 3.26% here is **not a competing estimate**. It counts one narrow class —
+The 4.50% here is **not a competing estimate**. It counts two narrow classes —
 under-determination that is provable by execution alone — where the published figures count
 all annotation errors, including wrong gold SQL, schema mismatches and ambiguous questions,
-which need human judgement to identify. Anyone comparing 3.26% against 52.8% is comparing a
+which need human judgement to identify. Anyone comparing 4.50% against 52.8% is comparing a
 mechanical lower bound with a human audit.
 
 What is unique here is the **instrument, not the number**: a deterministic, reproducible,
@@ -32,7 +32,7 @@ quietly deleted.
 
 ## 2. The oracle-integrity figure is a lower bound, not a count
 
-**3.26% of BIRD dev is excluded. The true share of under-determined items is higher**, and
+**4.50% of BIRD dev is excluded. The true share of unusable answer keys is higher**, and
 three known gaps all push the same way:
 
 - **Only the top-level `LIMIT` is probed for ties.** A `LIMIT` inside a subquery whose
@@ -48,9 +48,9 @@ No gap is known that would push the number *down*: every exclusion is on positiv
 
 ## 3. It says nothing about how much any published BIRD score is wrong by
 
-The 50 excluded items cannot distinguish a correct model from an incorrect one. Whether a
+The 69 excluded items cannot distinguish a correct model from an incorrect one. Whether a
 given system gained or lost from them depends on which answer it happened to produce, and
-**that is not measured here.** A reader who converts 3.26% into an error bar on someone's
+**that is not measured here.** A reader who converts 4.50% into an error bar on someone's
 leaderboard number is doing something this report does not support.
 
 ## 4. The dialect is a decision, and it decides the result
@@ -81,7 +81,7 @@ smoke test that the pipeline works end to end. It is not a measurement, no contr
 certified it, and two of its four arms are marked `DEGENERATE` because the example index
 was empty.
 
-## 7. The model has been measured on 19 items, and on nothing else
+## 7. The model was measured on 19 items, and on nothing else
 
 `sqlassay demonstrate` runs `qwen3.5:4b-mlx` over the 19 tie items whose valid answers are
 enumerable, and that is the **entire** extent of model measurement in this repository. Its

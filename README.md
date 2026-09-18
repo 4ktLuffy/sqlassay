@@ -10,6 +10,11 @@ decides whether it is one read-only statement; DuckDB decides whether it runs; t
 set decides whether it is right. Every verdict is `PASSED`, `FAILED` or `NOT_RUN`, and the
 third is never collapsed into the second.
 
+**Every number below is regenerated from a committed artifact and diffed.** `make docs` fails
+on drift, and fails again if any number in these documents is neither diffed nor declared in
+[`NUMBERS.md`](NUMBERS.md) with its source. [`EVIDENCE.md`](EVIDENCE.md) maps each claim to
+the artifact behind it. Neither needs a database, a model or a network.
+
 ## Why this exists
 
 Text-to-SQL is the rare LLM task with a **machine-checkable oracle**. There is no judge
@@ -102,7 +107,10 @@ sqlassay oracle --suite bird --revision 2024-06-27 --timeout-s 300
 sqlassay oracle --suite bird --revision 2025-11-06 --timeout-s 300
 ```
 
-| defect | 2024-06-27 | 2025-11-06 |
+Both revisions hold the same **1,534** items over the same 11 databases; only the questions
+and gold SQL differ.
+
+| defect (of 1,534 items) | 2024-06-27 | 2025-11-06 |
 |---|---|---|
 | gold depends on the **system clock** | 16 | **39** |
 | ambiguous — `ORDER BY` ties across the `LIMIT` boundary | 44 | 23 |
@@ -117,8 +125,8 @@ Item by item, what the review did to each class:
 | ambiguous answer keys | 26 | 24 | 6 |
 | clock-dependent answer keys | 2 | 14 | **25** |
 
-**The review halved the ambiguity and more than doubled the clock dependence.** Net, the
-suite has slightly *more* unusable answer keys than before it.
+**The review halved the ambiguity and more than doubled the clock dependence** — 16 to 39.
+Net, the suite it recommends has *more* unusable answer keys than the one it replaced: 66 to 69.
 
 ### The clock-dependent class is the serious one
 
@@ -211,7 +219,7 @@ which should be read first. This measures one narrow class that execution alone 
 It **does not** say how much any published score is wrong by. Whether a system gained or
 lost on these items depends on which valid answer it produced, and that is not measured here.
 
-It **does** say that 30 items in the current recommended dev split cannot distinguish a
+It **does** say that 69 items in the current recommended dev split cannot distinguish a
 correct model from an incorrect one, that 6 of them were created by the pass meant to fix
 this, and that both facts are recoverable by anyone in ten minutes with no annotators.
 
