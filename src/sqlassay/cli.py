@@ -1,21 +1,35 @@
 """The command line.
 
-Five commands, in the order you would use them:
+The measured path, in the order it must be walked. Each step is a
+precondition for the next, and the ordering is the methodology rather than a
+convenience:
 
-``selftest``   prove every gate can still go red
-``demo``       build the demo database and its indexes
-``index``      build the schema and value indexes for a database
-``run``        run one arm over the items
-``ablation``   run all four arms and print the comparison
+``selftest``     prove every gate can still go red
+``oracle``       check the benchmark's answer keys, before any model runs
+``floors``       measure what trivial predictors score on the surviving suite
+``controls``     run the negative controls; refuses to certify a bad config
+``index-bird``   build the schema and value indexes
+``bench``        the measured run: arms x repeats, resumable
+
+``floors`` must follow ``oracle`` because a floor measured over unusable items
+is not a floor for the suite being scored, and ``controls`` must follow
+``floors`` because its bands are derived from them. ``bench`` comes last
+because a number from an uncertified configuration may not be reported.
+
+The demo fixture has its own short path -- ``demo``, ``index``, ``run``,
+``ablation`` -- and ``demonstrate`` measures whether ambiguous answer keys
+actually cost a model marks.
 """
 
 from __future__ import annotations
 
 import json
+import time
 from pathlib import Path
 
 import typer
 
+from sqlassay.bench import BenchKey, arm_summary, completed_keys, run_plan
 from sqlassay.controls import DEFAULT_EXPECTED_PATH, all_controls, build_context, load_expected
 from sqlassay.demo import DEMO_DB_ID, build_demo_database, defective_items, demo_items
 from sqlassay.demonstrate import demonstrate_item, write_report
@@ -32,6 +46,7 @@ from sqlassay.floors import (
 )
 from sqlassay.gates import ExecuteGate, ParseGate, ResultSetGate
 from sqlassay.model.ollama import DEFAULT_BASE_URL, OllamaChat, OllamaEmbedder
+from sqlassay.models import Outcome
 from sqlassay.oracle import check_suite
 from sqlassay.retrieval import ARMS, Retriever, VectorStore, build_schema_index, build_value_index
 from sqlassay.runner import GoldError, ItemRunner, summarise
@@ -130,6 +145,138 @@ def oracle(
         f"\n{len(report.admissible_items)} of {len(report.verdicts)} items can score a model. "
         f"{n_excl} excluded ({pct:.2f}%). {elapsed:.1f}s. Written to {out}."
     )
+
+
+@app.command()
+def index_bird(
+    bird_root: Path = typer.Option(BIRD_DEFAULT_ROOT),
+    revision: str = typer.Option("2025-11-06"),
+    index_path: Path = typer.Option(Path("run/bird_indexes.db")),
+    embed_model: str = typer.Option("qwen3-embedding:0.6b"),
+    base_url: str = typer.Option(DEFAULT_BASE_URL),
+) -> None:
+    """Build the schema and value indexes for every BIRD database.
+
+    The example index is deliberately NOT built here. It holds verified
+    question -> SQL pairs, and populating it from the evaluation split would
+    score items against their own answers. It stays empty until a train/test
+    split exists, and the ablation reports its arms as DEGENERATE until then --
+    which is the honest state, not a gap to paper over.
+    """
+    embedder = OllamaEmbedder(embed_model, base_url=base_url)
+    loaded = load_bird_dev(bird_root, timeout_s=300.0, revision=revision)
+    total_schema = total_values = 0
+    try:
+        with VectorStore(index_path, dim=embedder.dim, embed_model=embed_model) as store:
+            for db_id, db in sorted(loaded.databases.items()):
+                n_s = build_schema_index(store, db, embedder, db_id=db_id)
+                n_v = build_value_index(store, db, embedder, db_id=db_id)
+                total_schema += n_s
+                total_values += n_v
+                typer.echo(f"  {db_id:26} schema={n_s:3}  values={n_v:5}")
+            store.freeze("schema", f"built from BIRD {revision} schemas; fixed for this run")
+            store.freeze("value", f"built from BIRD {revision} data; fixed for this run")
+    finally:
+        loaded.close()
+    typer.echo(f"\n{total_schema} schema docs + {total_values} value literals -> {index_path}")
+    typer.echo("schema and value indexes frozen. example index left empty by design.")
+
+
+@app.command()
+def bench(
+    arms: str = typer.Option("full,schema,schema_examples,schema_examples_values"),
+    repeats: int = typer.Option(5),
+    per_difficulty: str = typer.Option(
+        "simple=120,moderate=60,challenging=20",
+        help="Stratified sample sizes. Empty string runs the whole admissible suite.",
+    ),
+    revision: str = typer.Option("2025-11-06"),
+    bird_root: Path = typer.Option(BIRD_DEFAULT_ROOT),
+    oracle_report: Path = typer.Option(Path("reports/oracle_integrity_bird_dev_20251106.json")),
+    index_path: Path = typer.Option(Path("run/bird_indexes.db")),
+    model: str = typer.Option("qwen3.5:4b-mlx"),
+    embed_model: str = typer.Option("qwen3-embedding:0.6b"),
+    base_url: str = typer.Option(DEFAULT_BASE_URL),
+    think: bool = typer.Option(False),
+    seed: int = typer.Option(0),
+    out: Path = typer.Option(Path("run/bench_outcomes.jsonl")),
+) -> None:
+    """The measured run: arms x repeats over the admissible suite. Resumable.
+
+    Re-running with the same `out` skips everything already recorded, so a
+    killed pass costs only the item it was on.
+    """
+    report = json.loads(oracle_report.read_text(encoding="utf-8"))
+    excluded = {e["item_id"] for e in report["excluded"]}
+    loaded = load_bird_dev(bird_root, timeout_s=300.0, revision=revision)
+    admissible = tuple(i for i in loaded.items if i.item_id not in excluded)
+
+    if per_difficulty.strip():
+        wanted = {}
+        for part in per_difficulty.split(","):
+            label, _, n = part.partition("=")
+            wanted[label.strip()] = int(n)
+        pool = loaded.__class__(items=admissible, databases=loaded.databases, root=loaded.root)
+        items = pool.stratified(wanted, seed=seed)
+    else:
+        items = admissible
+
+    arm_list = [a.strip() for a in arms.split(",") if a.strip()]
+    unknown = [a for a in arm_list if a not in ARMS]
+    if unknown:
+        typer.echo(f"unknown arm(s): {unknown}; known: {list(ARMS)}")
+        raise typer.Exit(code=2)
+
+    chat = OllamaChat(model, base_url=base_url, think=think)
+    embedder = OllamaEmbedder(embed_model, base_url=base_url)
+    total = len(arm_list) * repeats * len(items)
+    already = len(completed_keys(out))
+    typer.echo(
+        f"suite {len(items)} items (of {len(admissible)} admissible) x {len(arm_list)} arms "
+        f"x {repeats} repeats = {total} calls; {already} already recorded"
+    )
+
+    done = [0]
+    t_start = time.perf_counter()
+
+    def progress(
+        key: BenchKey, outcome: Outcome | None, elapsed: float, error: str | None
+    ) -> None:
+        done[0] += 1
+        if done[0] % 25 == 0 or error:
+            rate = (time.perf_counter() - t_start) / max(done[0], 1)
+            left = (total - already - done[0]) * rate / 60
+            mark = "ERR" if error else ("ok " if outcome and outcome.correct else "   ")
+            typer.echo(
+                f"  [{done[0]:5}/{total - already}] {mark} {key.arm:24} r{key.repeat} "
+                f"{key.item_id}  {elapsed:4.1f}s  ~{left:.0f}m left" + (f"  {error}" if error else "")
+            )
+
+    try:
+        with VectorStore(index_path, dim=embedder.dim, embed_model=embed_model) as store:
+            runner = ItemRunner(
+                chat=chat,
+                retriever=Retriever(store=store, embedder=embedder),
+                parse=ParseGate(),
+                execute=ExecuteGate(),
+                resultset=ResultSetGate(),
+            )
+            run_plan(
+                runner, loaded.databases, arm_list, repeats, items, out,
+                config={**chat.config, "revision": revision, "seed": seed},
+                on_progress=progress,
+            )
+    finally:
+        loaded.close()
+
+    summary = arm_summary(out)
+    typer.echo("\narm                        repeats   acc_mean    acc_sd   range")
+    for arm, s in summary.items():
+        typer.echo(
+            f"{arm:26} {s['repeats']:7}   {s['accuracy_mean']:.4f}   {s['accuracy_sd']:.4f}   "
+            f"[{s['accuracy_min']:.4f}, {s['accuracy_max']:.4f}]"
+        )
+    typer.echo(f"\nOutcomes in {out}.")
 
 
 @app.command()
