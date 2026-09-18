@@ -58,6 +58,7 @@ measured size of a mistake, not a property of BIRD.
 | BIRD instances carrying annotation errors, by human audit | 52.8% | [arXiv:2601.08778](https://arxiv.org/pdf/2601.08778) |
 | Error rate reported on BIRD Mini-Dev | 66.1% | [arXiv:2402.12243](https://arxiv.org/pdf/2402.12243) |
 | Annotation-error analysis naming ORDER BY ties | — | [CIDR 2026](https://www.vldb.org/cidrdb/papers/2026/p5-jin.pdf) |
+| BIRD executes gold and prediction together and compares result sets | — | [Li et al., 2023 — arXiv:2305.03111](https://arxiv.org/pdf/2305.03111) |
 
 ## Illustrative values appearing in examples
 

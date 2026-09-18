@@ -46,14 +46,37 @@ three known gaps all push the same way:
 No gap is known that would push the number *down*: every exclusion is on positive evidence
 — a tie actually observed in the data, with distinct projections actually present.
 
-## 3. It says nothing about how much any published BIRD score is wrong by
+## 3. The first version of the clock finding was overstated, and was published
+
+This README claimed that clock-dependent golds make published BIRD scores irreproducible
+across dates. **That is wrong.** BIRD executes the predicted and the gold SQL together and
+compares result sets ([Li et al., 2023](https://arxiv.org/pdf/2305.03111)), so within one
+evaluation run both sides observe the same clock and a prediction computing "now" tracks the
+gold exactly.
+
+The claim went out because the observation behind it — gold failing to reproduce itself
+inside a single control run — was explained without checking how BIRD actually scores. The
+real cause was this harness caching gold rows and re-executing 40 minutes later. That is a
+property of **this tool's design**, not of the benchmark.
+
+What survives is narrower: a cached, precomputed or published gold result set goes stale, and
+a prediction that does not itself track the clock drifts against the gold over time. Both are
+real; neither is "BIRD's scoring is broken".
+
+The 39 items are still excluded here, because this harness caches gold and its own twin has
+to be reproducible. That is a decision about the tool.
+
+This entry is kept rather than the claim quietly edited, because a repository whose argument
+is that unverified numbers are the disease does not get to silently fix its own.
+
+## 4. It says nothing about how much any published BIRD score is wrong by
 
 The 69 excluded items cannot distinguish a correct model from an incorrect one. Whether a
 given system gained or lost from them depends on which answer it happened to produce, and
 **that is not measured here.** A reader who converts 4.50% into an error bar on someone's
 leaderboard number is doing something this report does not support.
 
-## 4. The dialect is a decision, and it decides the result
+## 5. The dialect is a decision, and it decides the result
 
 BIRD is run on **SQLite**, the dialect its gold was written in. Measured on 80 sampled
 golds that execute correctly under SQLite, **5 fail under DuckDB** (`IIF()`, and bare
@@ -61,7 +84,7 @@ columns outside `GROUP BY`) — so running the same check with DuckDB would repo
 6% of BIRD's answer keys as broken. That number would be about the engine, not the
 benchmark. Any reproduction that swaps the engine is measuring something else.
 
-## 5. An earlier version of the ambiguity check was wrong by 79%
+## 6. An earlier version of the ambiguity check was wrong by 79%
 
 The first implementation matched any `LIMIT` in the parse tree against the *top-level*
 `ORDER BY`, so a subquery that ordered and then limited flagged its outer query. On BIRD
@@ -74,14 +97,14 @@ argument for the rest of this file: the check now has regression tests in both d
 (`tests/test_normalize.py::TestAmbiguityScoping`), and the tie check has tests that a real
 tie is caught *and* a harmless one is not.
 
-## 6. The retrieval ablation has never been run on BIRD
+## 7. The retrieval ablation has never been run on BIRD
 
 The four-arm table in the README is **8 demo items**, written by hand as a fixture. It is a
 smoke test that the pipeline works end to end. It is not a measurement, no control has
 certified it, and two of its four arms are marked `DEGENERATE` because the example index
 was empty.
 
-## 7. The model was measured on 19 items, and on nothing else
+## 8. The model was measured on 19 items, and on nothing else
 
 `sqlassay demonstrate` runs `qwen3.5:4b-mlx` over the 19 tie items whose valid answers are
 enumerable, and that is the **entire** extent of model measurement in this repository. Its
@@ -96,7 +119,7 @@ No accuracy number, no ablation, no repeats, no controls. M3–M5 in [`PLAN.md`]
 not done, and nothing here should be read as a claim about what a small local model can do
 on BIRD.
 
-## 8. The clock-dependence check is static, and that is a real limit
+## 9. The clock-dependence check is static, and that is a real limit
 
 It matches the SQL forms — `julianday('now')`, `strftime(..., 'now')`, `CURRENT_DATE` and
 friends. It cannot see a gold whose answer drifts for some other reason, and it would miss
@@ -108,7 +131,7 @@ An earlier version of the pattern required `'now'` to be the *first* argument, s
 every `strftime('%Y','now')` and reported 20 instead of 39 — a 49% undercount that looked
 entirely plausible. The regression is pinned in `tests/test_normalize.py::TestClockDependence`.
 
-## 9. One item's gold takes 154 seconds
+## 10. One item's gold takes 154 seconds
 
 `bird-dev-00701` executes in 154 s and returns one row. At the 30 s deadline used in the
 first pass it was recorded as a failure; at 300 s it is admissible. It is correct SQL over

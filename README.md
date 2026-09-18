@@ -91,7 +91,7 @@ each is a decision this harness makes explicitly, in
 set. A query that errored or timed out did not produce one. The two never arrive in the
 same shape, because an empty gold can legitimately match the first and never the second.
 
-## Measured: BIRD's own quality review made its answer keys worse, twice
+## Measured: what BIRD's own quality review did to its answer keys
 
 The first thing this harness does is check the **benchmark**, not the model. The gold SQL
 is run as if it were the prediction, through all three gates. An answer key that cannot
@@ -126,22 +126,37 @@ Item by item, what the review did to each class:
 | clock-dependent answer keys | 2 | 14 | **25** |
 
 **The review halved the ambiguity and more than doubled the clock dependence** — 16 to 39.
-Net, the suite it recommends has *more* unusable answer keys than the one it replaced: 66 to 69.
+Counted by this harness's exclusion rule the suite it recommends carries more unusable answer
+keys than the one it replaced, 66 to 69 — but that total mixes the two classes, and only the
+ambiguity class is a defect in BIRD's own terms. See the section below on what clock
+dependence does and does not break.
 
-### The clock-dependent class is the serious one
+### What clock dependence does and does not break
 
 ```sql
 AVG(CAST(strftime('%Y','now') - strftime('%Y', c.birth_date) AS REAL))   -- bird-dev-00092
 (julianday('now') - julianday(cd.issued)) / 365.25                        -- bird-dev-00178
 ```
 
-An ambiguous gold has several equally valid answers. A **clock-dependent gold has a
-different answer depending on the date you run it**. Scores on those items are not
-reproducible across time at all: run BIRD today and in six months and the answer key has
-moved underneath you.
+**It does not break BIRD's own scoring.** BIRD executes the predicted and the gold SQL
+together, in the same SQLite environment, and compares the result sets
+([Li et al., 2023](https://arxiv.org/pdf/2305.03111)). Within one evaluation run both sides
+see the same clock, so a prediction that also computes "now" tracks the gold exactly. An
+earlier version of this README claimed these items make published scores irreproducible
+across dates. **That was wrong, and it was published before being checked** — see
+[`LIMITATIONS.md`](LIMITATIONS.md) §3.
 
-Twenty-five of the 39 are in `financial`, which went from 1 to 25 — the review rewrote
-those queries to compute ages with `strftime('%Y','now')`.
+What it does break is narrower, and real:
+
+- **Any gold result set that is cached, precomputed or published goes stale.** This harness
+  caches gold rows once per suite and reuses them across passes, which is why four of these
+  items made its own twin unreproducible forty minutes into a control run.
+- **A prediction that does not track the clock is scored inconsistently over time.** A model
+  answering with a fixed cutoff date agrees with the gold on the day it is run and drifts
+  afterwards, for reasons that have nothing to do with the model.
+
+They are excluded here because **this** harness caches gold. That is a decision about this
+tool, not a verdict on the benchmark.
 
 ### This was found by the harness failing, not by looking for it
 
